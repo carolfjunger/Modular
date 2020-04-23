@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
     Nome: Partida
     Descriçao: Modulo responsavel por gerenciar um partida num jogo de Yathzee

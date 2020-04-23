@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 '''
     Nome: Rodada
     Descriçao: Modulo responsavel por gerenciar uma Rodada num jogo de Yathzee

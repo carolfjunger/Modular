@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
     Nome: Jogador
     Descriçao: Modulo responsavel por gerenciar um jogador num jogo de Yathzee
