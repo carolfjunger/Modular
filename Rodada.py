@@ -15,9 +15,39 @@ __all__ = ["cria", "limpa_rodadas", "finaliza"]
 rodadas = []
 
 
+'''
+    Definição:
+        Função responsável por criar uma Rodada de uma partida de Yahtzee.
+    Parâmetros:
+        jogador: Instância do tipo Jogador que representa o jogador que jogará a rodada
+        numero: número da rodada a ser criada
+    Retorno: 
+        1: caso rodada tenha sido criada com sucesso
+        -1: caso jogador nao seja um dicionario
+        -2: caso jogador nao seja do tipo Jogador
+        -3: caso numero nao seja um inteiro
+        -4: caso o numero seja menor que 1
+        -5: caso o numero seja maior que 13
+        -6: caso ja tenha alguma rodada ativa
+
+'''
+
+
 def cria(jogador, numero):
-    if (type(jogador) != dict or jogador == {} or type(numero) != int or numero<1 or numero>13):
+    if (type(jogador) != dict ):
         return -1
+    elif (jogador == {}):
+        return -2
+    if ( type(numero) == int):
+        if(numero<1):
+            return -4
+        elif (numero>13):
+            return -5
+    else:    
+        return -3
+    for rodada in rodadas:
+        if(rodada["ativa"] ==  True):
+            return -6
     index = len(rodadas) - 1
     if (index > 0):
         lastId = rodadas[len(rodadas) - 1]["id"]
@@ -31,6 +61,18 @@ def cria(jogador, numero):
 def limpa_rodadas():
     while( rodadas != []):
         rodadas.pop()
+
+
+'''
+    Definição:
+        Função responsável por finalizar uma Rodada ativa de uma partida de Yahtzee.
+    Parâmetros:
+        
+    Retorno: 
+        1: caso rodade tenha sido finalizada com sucesso
+        -1: caso nao tem rodada ativa
+
+'''
 
 def finaliza ():
     for rodada in rodadas:
