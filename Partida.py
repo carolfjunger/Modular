@@ -1,4 +1,13 @@
+'''
+    Nome: Partida
+    Descriçao: Modulo responsavel por gerenciar um partida num jogo de Yathzee
+    Funcoes de Acesso: cria, finaliza
+    Autores: ACJ - Ana Carolina Junger
+    Historico de evolucao:
+        Autor         Versao            Data              Observacao
+        ACJ             1               22/04/2020          criacao das primeiras funcoes
 
+'''
 
 __all__ = ["cria", "finaliza", "limpa_partidas"]
 
@@ -12,10 +21,10 @@ def cria (jogadores):
             return -1
     index = len(partidas) - 1
     if (index > 0):
-        lastId = jogadores[len(partidas) - 1]["id"]
+        lastId = partidas[len(partidas) - 1]["id"]
     else:
         lastId = -1
-    partida = {"id": lastId - 1, "jogadores": [], "campeao": "", "ativa": True}
+    partida = {"id": lastId + 1, "jogadores": [], "campeao": "", "ativa": True}
     for jogador in jogadores:
         partida["jogadores"].append(jogador)
     if (len(partida["jogadores"]) < 2):

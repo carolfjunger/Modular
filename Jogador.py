@@ -1,3 +1,13 @@
+'''
+    Nome: Jogador
+    Descriçao: Modulo responsavel por gerenciar um jogador num jogo de Yathzee
+    Funcoes de Acesso: cria
+    Autores: ACJ - Ana Carolina Junger
+    Historico de evolucao:
+        Autor         Versao            Data              Observacao
+        ACJ             1               22/04/2020          criacao das primeiras funcoes
+        
+'''
 
 __all__ = ["cria", "limpa_jogadores"]
 

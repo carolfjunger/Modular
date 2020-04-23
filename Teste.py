@@ -2,6 +2,7 @@
 import unittest
 import Jogador
 import Partida
+import Rodada
 
 class VerificarPangramaTests(unittest.TestCase):
     def testa_01_funcao_cria_modulo_jogador(self):
@@ -69,4 +70,71 @@ class VerificarPangramaTests(unittest.TestCase):
         Partida.cria(Jogador.jogadores)
         retorno_esperado = Partida.finaliza()
         self.assertEqual(retorno_esperado, 1)
+
+    def teste_01_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 01 Funcao Cria Rodada- Funcao retorna -1 caso nao receba jogador")
+        retorno_esperado = Rodada.cria(12234, 1)
+        self.assertEqual(retorno_esperado, -1)
+
+    def teste_02_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 02 Funcao Cria Rodada- Funcao retorna -1 caso o dicionario nao represente um jogador")
+        retorno_esperado = Rodada.cria({}, 1)
+        self.assertEqual(retorno_esperado, -1)
+
+    def teste_03_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 03 Funcao Cria Rodada- Funcao retorna -1 caso o numero da rodada nao seja um numero")
+        Jogador.limpa_jogadores()
+        Jogador.cria("Joao")
+        jogador = Jogador.jogadores[0]
+        retorno_esperado = Rodada.cria(jogador, "oi")
+        self.assertEqual(retorno_esperado, -1)
     
+    def teste_04_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 04 Funcao Cria Rodada- Funcao retorna -1 caso o numero da rodada seja menor que 1")
+        Jogador.limpa_jogadores()
+        Jogador.cria("Joao")
+        jogador = Jogador.jogadores[0]
+        retorno_esperado = Rodada.cria(jogador, "oi")
+        self.assertEqual(retorno_esperado, -1)
+
+
+    def teste_05_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 05 Funcao Cria Rodada- Funcao retorna -1 caso o numero da rodada seja menor que 1")
+        Jogador.limpa_jogadores()
+        Jogador.cria("Joao")
+        jogador = Jogador.jogadores[0]
+        retorno_esperado = Rodada.cria(jogador, 0)
+        self.assertEqual(retorno_esperado, -1)
+
+    def teste_06_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 06 Funcao Cria Rodada- Funcao retorna -1 caso o numero da rodada seja maior que 13")
+        Jogador.limpa_jogadores()
+        Jogador.cria("Joao")
+        jogador = Jogador.jogadores[0]
+        retorno_esperado = Rodada.cria(jogador, 25)
+        self.assertEqual(retorno_esperado, -1)
+
+    def teste_07_funcao_cria_modulo_rodada(self):
+        print("Caso de Teste 07 Funcao Cria Rodada- Funcao retorna -1 caso o dicionario nao represente um jogador")
+        Jogador.limpa_jogadores()
+        Jogador.cria("Joao")
+        jogador = Jogador.jogadores[0]
+        retorno_esperado = Rodada.cria(jogador, 1)
+        self.assertEqual(retorno_esperado, 1)
+    
+    def teste_01_funcao_finaliza_modulo_rodada(self):
+        print("Caso de Teste 01 Funcao Finaliza Rodada- Funcao retorna -1 caso nao tenha rodadas ativas")
+        Rodada.limpa_rodadas()
+        retorno_esperado = Rodada.finaliza()
+        self.assertEqual(retorno_esperado, -1)
+    
+    def teste_02_funcao_finaliza_modulo_rodada(self):
+        print("Caso de Teste 02 Funcao Finaliza Rodada - Funcao retorna 1 caso tenha finalizado a rodada ativa")
+        Rodada.limpa_rodadas()
+        Jogador.limpa_jogadores()
+        Jogador.cria("Joao")
+        Jogador.cria("Pedro")
+        jogador = Jogador.jogadores[0]
+        Rodada.cria(jogador, 1)
+        retorno_esperado = Rodada.finaliza()
+        self.assertEqual(retorno_esperado, 1)
