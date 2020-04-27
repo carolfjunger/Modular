@@ -4,8 +4,9 @@ import Jogador
 import Partida
 import Rodada
 import Cartela
+import Dado
 
-class VerificarPangramaTests(unittest.TestCase):
+class JogadorTeste(unittest.TestCase):
     def testa_01_funcao_cria_modulo_jogador(self):
         print("Caso de Teste 01 Funcao Cria Jogador - Funcao retorna -1 caso o nome seja uma string vazia")
         retorno_esperado = Jogador.cria("")
@@ -54,6 +55,8 @@ class VerificarPangramaTests(unittest.TestCase):
         retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(jogadorId, -1)
         self.assertEqual(retorno_esperado, -4)
     
+
+class PartidaTeste(unittest.TestCase):
     def teste_01_funcao_cria_modulo_partida(self):
         print("Caso de Teste 01 Funcao Cria Partida- Funcao retorna -1 caso array de jogadores tenha tamanho menor que 2")
         retorno_esperado = Partida.cria([])
@@ -99,6 +102,7 @@ class VerificarPangramaTests(unittest.TestCase):
         retorno_esperado = Partida.finaliza()
         self.assertEqual(retorno_esperado, 1)
 
+class RodadaTeste(unittest.TestCase):
     def teste_01_funcao_cria_modulo_rodada(self):
         print("Caso de Teste 01 Funcao Cria Rodada- Funcao retorna -1 caso nao receba jogador")
         retorno_esperado = Rodada.cria(12234, 1)
@@ -169,6 +173,8 @@ class VerificarPangramaTests(unittest.TestCase):
         retorno_esperado = Rodada.finaliza()
         self.assertEqual(retorno_esperado, 1)
 
+
+class CartelaTeste(unittest.TestCase):
     def teste_01_funcao_cria_modulo_cartela(self):
         print("Caso de Teste 01 Funcao Cria Cartela- Funcao retorna -1 caso nao receba um Id de jogador como parametro")
         retorno_esperado = Cartela.cria("")
@@ -306,3 +312,16 @@ class VerificarPangramaTests(unittest.TestCase):
         Cartela.preenche(jogadorId, "jogadaAleatoria", 30)
         retorno_esperado = Cartela.somaPontuacao(jogadorId)
         self.assertEqual(retorno_esperado, 1)
+
+
+class DadoTeste (unittest.TestCase):
+    def testa_se_valor_retornado_pela_funcao_jogarDado_eh_valido (self):       
+        retorno_esperado = True
+        
+        for i in range(0,100):
+            resultado = Dado.jogaDado()
+            
+            if(resultado<1 or resultado>6):
+                retorno_esperado = False
+            
+        self.assertEqual(retorno_esperado, True)
