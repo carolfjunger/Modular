@@ -8,6 +8,7 @@
         Autor         Versao            Data              Observacao
         ACJ             1               22/04/2020          criacao das primeiras funcoes
         ACJ             2               26/04/2020          criacao da funcao pegaJogadorId
+        ACJ             3               02/05/2020          criacao da funcao existe
         
 '''
 
@@ -75,5 +76,11 @@ def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos):
     for jogador in jogadores:
         if (jogador["id"] == jogadorId):
             jogador["totalDePontos"] = totalDePontos
+            return 1
+    return -1
+
+def existe (jogadorId):
+    for jogador in jogadores:
+        if ( jogador["id"] == jogadorId):
             return 1
     return -1

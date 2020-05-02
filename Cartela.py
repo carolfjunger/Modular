@@ -32,13 +32,8 @@ cartelas = []
 def cria(jogadorId):
     if (type(jogadorId) != int):
         return -1
-    jogadores = Jogador.jogadores
-    idExiste = False
-    for jogador in jogadores:
-        if ( jogador["id"] == jogadorId):
-            idExiste = True
-            break
-    if (idExiste != True):
+    idExiste = Jogador.existe(jogadorId)
+    if (idExiste != 1):
         return -2
     jogadorJaTemCartela = False
     for cartela in cartelas:

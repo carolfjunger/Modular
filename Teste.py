@@ -27,6 +27,20 @@ class JogadorTeste(unittest.TestCase):
         print("Caso de Teste 04  Funcao Cria Jogador- Funcao retorna 1 caso o jogador tem sido criado ")
         retorno_esperado = Jogador.cria("Pedro")
         self.assertEqual(retorno_esperado, 1)
+
+    def testa_01_funcao_existe_modulo_jogador(self):
+        print("Caso de Teste 01  Funcao Existe Jogador- Funcao retorna -1 caso o jogador nao exista ")
+        Jogador.limpa_jogadores()
+        retorno_esperado = Jogador.existe(25)
+        self.assertEqual(retorno_esperado, -1)
+
+    def testa_02_funcao_existe_modulo_jogador(self):
+        print("Caso de Teste 02  Funcao Existe Jogador- Funcao retorna 1 caso o jogador  exista ")
+        Jogador.limpa_jogadores()
+        Jogador.cria("Pedro")
+        jogadorId = Jogador.pegaJogadorId("Pedro")
+        retorno_esperado = Jogador.existe(jogadorId)
+        self.assertEqual(retorno_esperado, 1)
     
     def testa_01_funcao_vinculaPontuacaoFinalAoJogador_modulo_jogador(self):
         print("Caso de Teste 01 Funcao vinculaPontuacaoFinalAoJogador - Funcao retorna -1 caso o jogador Id nao exista")
