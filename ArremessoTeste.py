@@ -10,7 +10,6 @@
 '''
 
 import unittest
-from unittest import mock
 import Arremesso
 
 
@@ -33,6 +32,9 @@ class ArremessoTeste (unittest.TestCase):
         
         self.assertEqual(Arremesso.escolhe_dados([3,1,6]),0)
         self.assertEqual(Arremesso.escolhe_dados([3,3,3]),0)
+    
+    def testa_se_funcao_geraPontuacao_eh_chamada_corretamente(self):
+        self.assertEqual(type(Arremesso.possiveis_pontuacoes([3,1,2,3,4])), dict)
 
 unittest.main()
         

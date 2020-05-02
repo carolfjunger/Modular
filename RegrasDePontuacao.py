@@ -106,9 +106,6 @@ def geraPontuacoes(lValores):
     DicPosicoes['jogadaAleatoria'] = soma
     
     return DicPosicoes
-               
-        
-print(geraPontuacoes([1,3,1,2,1]))    
       
         
         
