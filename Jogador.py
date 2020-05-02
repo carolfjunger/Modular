@@ -7,10 +7,11 @@
     Historico de evolucao:
         Autor         Versao            Data              Observacao
         ACJ             1               22/04/2020          criacao das primeiras funcoes
+        ACJ             2               26/04/2020          criacao da funcao pegaJogadorId
         
 '''
 
-__all__ = ["cria", "limpa_jogadores"]
+__all__ = ["cria", "limpa_jogadores", "pegaJogadorId", "vinculaPontuacaoFinalAoJogador"]
 
 jogadores = []
 
@@ -57,3 +58,22 @@ def limpa_jogadores ():
     while(jogadores != []):
         jogadores.pop()
 
+
+
+def pegaJogadorId (nome):
+    for jogador in jogadores:
+        if (jogador["nome"] == nome):
+            return jogador["id"]
+
+def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos):
+    if (type(jogadorId) != int):
+        return -2
+    if (type(totalDePontos) != int):
+        return -3
+    if (totalDePontos<0):
+        return -4 
+    for jogador in jogadores:
+        if (jogador["id"] == jogadorId):
+            jogador["totalDePontos"] = totalDePontos
+            return 1
+    return -1
