@@ -72,7 +72,7 @@ def limpa_partidas():
         lista com o jogador ou os jogadores (caso empate) que obtiveram a maior pontuacao
         
 '''
-# duvida : como eu testo essa funcao
+
 def defineJogadorComMaiorPontuacao (jogadores):
     maxPontuacao = jogadores[0]["totalDePontos"]
     jogadorCampeao = [jogadores[0]]

@@ -9,6 +9,7 @@
         ACJ             1               22/04/2020          criacao das primeiras funcoes
         ACJ             2               26/04/2020          criacao da funcao pegaJogadorId
         ACJ             3               02/05/2020          criacao da funcao existe
+        ACJ             4               03/05/2020          insercao da documentacao faltante
         
 '''
 
@@ -43,7 +44,7 @@ def cria (nome):
         lastId = jogadores[len(jogadores) - 1]["id"]
     else:
         lastId = -1
-    jogador = { "id": lastId + 1, "nome": nome, "totalDePontos": 0, "rodadas": []}
+    jogador = { "id": lastId + 1, "nome": nome, "totalDePontos": 0}
     jogadores.append(jogador)
     return 1
 
@@ -61,10 +62,34 @@ def limpa_jogadores ():
 
 
 
+'''
+    Definição:
+        Função responsável por pegar o id de um jogador a partir do nome.
+    Parâmetros: nome
+    Retorno: String id do jogador
+        
+'''
+
 def pegaJogadorId (nome):
     for jogador in jogadores:
         if (jogador["nome"] == nome):
             return jogador["id"]
+
+
+'''
+    Definição:
+        Função responsável por vincular a soma da pontuacao da cartela ao jogador.
+    Parâmetros: 
+        jogadorId: id do Jogador
+        totalDePontos: int com a soma total de pontos da cartela
+    Retorno:
+        1: caso sucesso
+        -1: caso o jogador nao exista
+        -2: caso o jogadorId nao seja um inteiro
+        -3: caso o totalDePontos nao seja um inteiro
+        -4: caso o totalDePontos seja menor que 0
+        
+'''
 
 def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos):
     if (type(jogadorId) != int):
@@ -78,6 +103,18 @@ def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos):
             jogador["totalDePontos"] = totalDePontos
             return 1
     return -1
+
+
+'''
+    Definição:
+        Função responsável por verificar se um jogador existe
+    Parâmetros: 
+        jogadorId: id do jogador
+    Retorno: 
+        1: caso o jogador exista
+        -1: caso o jogador nao exista
+        
+'''
 
 def existe (jogadorId):
     for jogador in jogadores:
