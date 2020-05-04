@@ -1,4 +1,23 @@
 # -*- coding: utf-8 -*-
+'''
+    Nome: Teste
+    Descriçao: Modulo responsavel por rodar os testes.
+    Autores: 
+        ACJ - Ana Carolina Junger
+        AB - Alexandra Bugarin
+    Historico de evolucao:
+        Autor         Versao            Data              Observacao
+        ACJ             1               22/04/2020          criacao dos primeiros testes
+        ACJ             2               23/04/2020          criacao dos testes para o módulo Rodada
+        AB              3               25/04/2020          criacao dos testes para o modulo dado
+        ACJ             4               26/04/2020          criacao dos testes para o modulo Cartela
+        ACJ             5               27/04/2020          separacao dos testes em classes por modulos
+        ACJ             6               02/05/2020          criacao dos testes para funcao existe jogador
+        ACJ             7               03/04/2020          criacao dos testes restantes
+
+
+'''
+
 import unittest
 import Jogador
 import Partida
@@ -27,6 +46,28 @@ class JogadorTeste(unittest.TestCase):
         print("Caso de Teste 04  Funcao Cria Jogador- Funcao retorna 1 caso o jogador tem sido criado ")
         retorno_esperado = Jogador.cria("Pedro")
         self.assertEqual(retorno_esperado, 1)
+
+    def testa_01_funcao_limpa_jogadores_modulo_jogador(self):
+        print("Caso de Teste 01  Funcao Limpa Jogadores")
+        retorno_esperado=True
+        for i in range(100):
+            Jogador.limpa_jogadores()
+            if (Jogador.jogadores != []):
+                retorno_esperado = False
+                break
+        self.assertEqual(retorno_esperado, True)
+
+    def testa_01_funcao_pegaJogadorId_modulo_jogador(self):
+        print("Caso de Teste 01  Funcao pegaJogadorId")
+        retorno_esperado=True
+        for i in range(100):
+            Jogador.limpa_jogadores()
+            Jogador.cria("Joao")
+            jogadorId = Jogador.pegaJogadorId("Joao")
+            if (jogadorId != 0 ):
+                retorno_esperado = False
+                break
+        self.assertEqual(retorno_esperado, True)
 
     def testa_01_funcao_existe_modulo_jogador(self):
         print("Caso de Teste 01  Funcao Existe Jogador- Funcao retorna -1 caso o jogador nao exista ")
@@ -81,6 +122,20 @@ class PartidaTeste(unittest.TestCase):
         retorno_esperado = Partida.cria(1111)
         self.assertEqual(retorno_esperado, -2)
 
+    def teste_01_funcao_limpa_partidas_modulo_partida(self):
+        print("Caso de Teste 01 Funcao limpa_partidas")
+        retorno_esperado=True
+        for i in range(100):
+            Jogador.limpa_jogadores()
+            Jogador.cria("Joao")
+            Jogador.cria("Pedro")
+            Partida.cria(Jogador.jogadores)
+            Partida.limpa_partidas()
+            if (Partida.partidas != []):
+                retorno_esperado = False
+                break
+        self.assertEqual(retorno_esperado, True)
+
     def teste_03_funcao_cria_modulo_partida(self):
         print("Caso de Teste 03 Funcao Cria Partida - Funcao retorna -2 caso ja tenha uma partida ativa")
         Jogador.limpa_jogadores()
@@ -115,6 +170,25 @@ class PartidaTeste(unittest.TestCase):
         Partida.cria(Jogador.jogadores)
         retorno_esperado = Partida.finaliza()
         self.assertEqual(retorno_esperado, 1)
+
+    def teste_01_funcao_defineJogadorComMaiorPontuacao_modulo_partida(self):
+        print("Caso de Teste 01 Funcao defineJogadorComMaiorPontuacao")
+        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([ { "id": 0, "nome": "Joao", "totalDePontos": 100}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+
+        self.assertEqual(retorno_esperado, [{ "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+
+    def teste_02_funcao_defineJogadorComMaiorPontuacao_modulo_partida(self):
+        print("Caso de Teste 02 Funcao defineJogadorComMaiorPontuacao")
+        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([ { "id": 0, "nome": "Joao", "totalDePontos": 200}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+
+        self.assertEqual(retorno_esperado, [{ "id": 0, "nome": "Joao", "totalDePontos": 200}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+
+    def teste_03_funcao_defineJogadorComMaiorPontuacao_modulo_partida(self):
+        print("Caso de Teste 03 Funcao defineJogadorComMaiorPontuacao")
+        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([ { "id": 0, "nome": "Joao", "totalDePontos": 300}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+
+        self.assertEqual(retorno_esperado, [{ "id": 0, "nome": "Joao", "totalDePontos": 300}])
+
 
 class RodadaTeste(unittest.TestCase):
     def teste_01_funcao_cria_modulo_rodada(self):
@@ -169,6 +243,21 @@ class RodadaTeste(unittest.TestCase):
         jogador = Jogador.jogadores[0]
         retorno_esperado = Rodada.cria(jogador, 1)
         self.assertEqual(retorno_esperado, 1)
+
+    def teste_01_funcao_limpa_rodadas_modulo_rodada(self):
+        print("Caso de Teste 01 Funcao limpa_rodadas")
+        retorno_esperado=True
+        for i in range(100):
+            Jogador.limpa_jogadores()
+            Rodada.limpa_rodadas()
+            Jogador.cria("Joao")
+            jogador = Jogador.jogadores[0]
+            Rodada.cria(jogador, 1)
+            Rodada.limpa_rodadas()
+            if (Rodada.rodadas != []):
+                retorno_esperado = False
+                break
+        self.assertEqual(retorno_esperado, True)
     
     def teste_01_funcao_finaliza_modulo_rodada(self):
         print("Caso de Teste 01 Funcao Finaliza Rodada- Funcao retorna -1 caso nao tenha rodadas ativas")
@@ -216,6 +305,20 @@ class CartelaTeste(unittest.TestCase):
         Jogador.cria("Joao")
         retorno_esperado = Cartela.cria(0)
         self.assertEqual(retorno_esperado, 1)
+
+    def teste_01_funcao_limpa_cartelas_modulo_cartela(self):
+        print("Caso de Teste 01 Funcao limpa_cartelas")
+        retorno_esperado=True
+        for i in range(100):
+            Jogador.limpa_jogadores()
+            Cartela.limpa_cartelas()
+            Jogador.cria("Joao")
+            retorno_esperado = Cartela.cria(0)
+            Cartela.limpa_cartelas()
+            if (Cartela.cartelas != []):
+                retorno_esperado = False
+                break
+        self.assertEqual(retorno_esperado, True)
 
     def teste_01_funcao_preenche_modulo_cartela(self):
         print("Caso de Teste 01 Funcao Preenche Cartela- Funcao retorna -1 caso nao receba um Id de jogador como parametro")

@@ -76,7 +76,7 @@ def limpa_partidas():
 def defineJogadorComMaiorPontuacao (jogadores):
     maxPontuacao = jogadores[0]["totalDePontos"]
     jogadorCampeao = [jogadores[0]]
-    for i in range(1, len(jogadores) - 1):
+    for i in range(1, len(jogadores)):
         if (maxPontuacao < jogadores[i]["totalDePontos"]):
             maxPontuacao = jogadores[i]["totalDePontos"]
             jogadorCampeao = [jogadores[i]]
