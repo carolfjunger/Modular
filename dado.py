@@ -12,5 +12,17 @@
 
 import random
     
+
+__all__ = ["jogaDado"]
+
+'''
+    Definição:
+        Função responsável por jogar um dado em um jogo de Yathzee.
+    Parâmetros:
+    
+    Retorno: 
+        Valor inteiro de 1 a 6
+'''
+
 def jogaDado():
     return random.randint(1,6)
