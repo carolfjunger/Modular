@@ -32,6 +32,7 @@ rodadas = []
 
 '''
 
+import Arremesso
 
 def cria(jogador, numero):
     if (type(jogador) != dict ):

@@ -11,6 +11,15 @@
 '''
 lPontuacoes = []
 
+'''
+    Definição:
+        Função responsável por gerar pontuacao de 5 dados em um jogo de Yathzee.
+    Parâmetros:
+        lValores: Lista com valores dos dados que serão calculados a pontuação
+    Retorno: 
+        Dicionário com possiveis pontuações para cada escolha da cartela
+'''
+
 def geraPontuacoes(lValores):
     DicPosicoes = {}
     lPontuacoes.clear()

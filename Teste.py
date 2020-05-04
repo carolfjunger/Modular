@@ -5,6 +5,8 @@ import Partida
 import Rodada
 import Cartela
 import Dado
+import Arremesso
+import RegrasDePontuacao
 
 class JogadorTeste(unittest.TestCase):
     def testa_01_funcao_cria_modulo_jogador(self):
@@ -315,7 +317,8 @@ class CartelaTeste(unittest.TestCase):
 
 
 class DadoTeste (unittest.TestCase):
-    def testa_se_valor_retornado_pela_funcao_jogarDado_eh_valido (self):       
+    def teste_01_funcao_jogaDado_modulo_Dado (self): 
+        #print("Caso de Teste 01 Funcao jogaDado - Funcao )
         retorno_esperado = True
         
         for i in range(0,100):
@@ -325,3 +328,49 @@ class DadoTeste (unittest.TestCase):
                 retorno_esperado = False
             
         self.assertEqual(retorno_esperado, True)
+        
+class ArremessoTeste (unittest.TestCase):
+    
+
+    def testa_se_dados_escolhidos_sao_possiveis(self):
+        Arremesso.lArremessos.clear()
+        lValoresGerados = [3,2,4,1,5]
+        Arremesso.lValores = lValoresGerados        
+
+        self.assertEqual(Arremesso.escolhe_dados([3,1,5]) ,1)
+    
+    def testa_se_tem_dados_para_arremessar(self):
+        Arremesso.lArremessos.clear()
+        retorno_esperado = Arremesso.arremessa([1,2,3,4,5])
+        
+        self.assertEqual(retorno_esperado, -2)
+        
+    def testa_se_tem_arremesso(self):
+        Arremesso.lArremessos.clear()
+        Arremesso.arremessa([])
+        Arremesso.arremessa([1])
+        Arremesso.arremessa([1,2,3])
+        
+        retorno_esperado = Arremesso.arremessa([1,2,3,4])
+        
+        self.assertEqual(retorno_esperado, -1)
+        
+    def testa_se_lValores_retorna_valor_esperado(self):
+        Arremesso.lArremessos.clear()
+        retorno_esperado = Arremesso.arremessa([])
+        for el in retorno_esperado:
+            self.assertEqual(type(el), int)
+            
+        self.assertEqual(len(retorno_esperado), 5)
+        
+        
+    def testa_se_dados_escolhidos_nao_sao_possiveis(self):
+        Arremesso.lArremessos.clear()
+        lValoresGerados = [3,2,4,1,5]
+        Arremesso.lValores = lValoresGerados
+        
+        self.assertEqual(Arremesso.escolhe_dados([3,1,6]),0)
+        self.assertEqual(Arremesso.escolhe_dados([3,3,3]),0)
+
+
+unittest.main()

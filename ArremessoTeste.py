@@ -15,31 +15,47 @@ import Arremesso
 
 class ArremessoTeste (unittest.TestCase):
     
-    def testa_se_quantidade_de_valores_eh_igual_qnt_de_dados(self):
-        qnt_dados = 5
-        lValoresGerados = Arremesso.arremessa(qnt_dados)
-        self.assertEqual(len(lValoresGerados),qnt_dados)
-        
+
     def testa_se_dados_escolhidos_sao_possiveis(self):
+        Arremesso.lArremessos.clear()
         lValoresGerados = [3,2,4,1,5]
         Arremesso.lValores = lValoresGerados        
 
         self.assertEqual(Arremesso.escolhe_dados([3,1,5]) ,1)
+    
+    def testa_se_tem_dados_para_arremessar(self):
+        Arremesso.lArremessos.clear()
+        retorno_esperado = Arremesso.arremessa([1,2,3,4,5])
+        
+        self.assertEqual(retorno_esperado, -2)
+        
+    def testa_se_tem_arremesso(self):
+        Arremesso.lArremessos.clear()
+        Arremesso.arremessa([])
+        Arremesso.arremessa([1])
+        Arremesso.arremessa([1,2,3])
+        
+        retorno_esperado = Arremesso.arremessa([1,2,3,4])
+        
+        self.assertEqual(retorno_esperado, -1)
+        
+    def testa_se_lValores_retorna_valor_esperado(self):
+        Arremesso.lArremessos.clear()
+        retorno_esperado = Arremesso.arremessa([])
+        for el in retorno_esperado:
+            self.assertEqual(type(el), int)
+            
+        self.assertEqual(len(retorno_esperado), 5)
+        
         
     def testa_se_dados_escolhidos_nao_sao_possiveis(self):
+        Arremesso.lArremessos.clear()
         lValoresGerados = [3,2,4,1,5]
         Arremesso.lValores = lValoresGerados
         
         self.assertEqual(Arremesso.escolhe_dados([3,1,6]),0)
         self.assertEqual(Arremesso.escolhe_dados([3,3,3]),0)
-    
-    def testa_se_funcao_geraPontuacao_eh_chamada_corretamente(self):
-        self.assertEqual(type(Arremesso.possiveis_pontuacoes([3,1,2,3,4])), dict)
+
 
 unittest.main()
-        
-            
-        
-        
-    
     

@@ -13,15 +13,60 @@
 import Dado
 import RegrasDePontuacao
 
+__all__ = ["arremessa", "escolhe_dados"]
+
 lValores = []
 lDadosEscolhidos = []
+lArremessos = []
+lPontuacao = []
 
-def arremessa(qnt_dados):
-    lValores.clear()
+
+
+'''
+    Definição:
+        Função responsável por arremessar os dados em um jogo de Yathzee.
+    Parâmetros:
+        nome: Lista com dados já selecionados pelo jogador, no caso de nenhum dado ainda ter sido escolhido,
+        uma lista vazia.
+    Retorno: 
+        lValores: caso o arremesso esteja ok
+        -1: caso o jogador já tenha arremessado o número máximo de vezes
+        -2: caso o jogador já tenha escolhido todos os 5 dados
+'''
+
+
+def arremessa(lDadosEscolhidos):
+    lAux = lDadosEscolhidos
+    
+    qnt_dados = 5 - len(lDadosEscolhidos)
+    qnt_arremesso = len(lArremessos)
+  
+    if qnt_arremesso == 3:
+        return -1
+    
+    if qnt_dados <= 0:
+        return -2
+    
     for i in range(0,qnt_dados):
-        lValores.append(Dado.jogaDado())
+        lAux.append(Dado.jogaDado())   
+    
+    lValores = lAux
+    lPontuacao.append(RegrasDePontuacao.geraPontuacoes(lValores))
+    
+    lArremessos.append(lValores)
+    
     return lValores
 
+'''
+    Definição:
+        Função responsável por guardar os dados que o jogador irá manter em uma rodada em um jogo de Yathzee.
+    Parâmetros:
+        lDados: Lista com dados selecionados pelo jogador
+    Retorno: 
+        0: caso o jogador tenha selecionado um valor que não tinha caido
+        1: Funcionou guardar os dados selecionados na lista lDadosEscolhidos
+'''
+    
 def escolhe_dados(lDados):
     lAuxiliar = lValores
     for dado in lDados:
@@ -30,9 +75,5 @@ def escolhe_dados(lDados):
         else:
             lAuxiliar.remove(dado)
     
-    lDadosEscolhidos = lDados
+    lDadosEscolhidos.append(lDados)
     return 1
-    
-def possiveis_pontuacoes(lValores):
-    return RegrasDePontuacao.geraPontuacoes(lValores)
-    
