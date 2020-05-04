@@ -10,10 +10,19 @@
         ACJ             1               22/04/2020          criacao dos primeiros testes
         ACJ             2               23/04/2020          criacao dos testes para o módulo Rodada
         AB              3               25/04/2020          criacao dos testes para o modulo dado
-        ACJ             4               26/04/2020          criacao dos testes para o modulo Cartela
-        ACJ             5               27/04/2020          separacao dos testes em classes por modulos
-        ACJ             6               02/05/2020          criacao dos testes para funcao existe jogador
-        ACJ             7               03/04/2020          criacao dos testes restantes
+        AB              4               25/04/2020          criacao dos primeiros testes para arremesso
+        ACJ             5               26/04/2020          criacao dos testes para o modulo Cartela
+        AB              6               26/04/2020          criacao testes para regrasDePontuacao com lista
+        AB              7               26/04/2020          criacao testes para regrasDePontuacao com lista
+        ACJ             8               27/04/2020          separacao dos testes em classes por modulos
+        AB              9               27/04/2020          criacao testes para arremessa com casos de erro
+        AB              10              28/04/2020          atualizacao de testes para regrasDePontuacao com dicionario
+        ACJ             11              02/05/2020          criacao dos testes para funcao existe jogador
+        ACJ             12              03/04/2020          criacao dos testes restantes
+        
+       
+        
+       
 
 
 '''
@@ -24,6 +33,9 @@ import Partida
 import Rodada
 import Cartela
 import Dado
+import Arremesso
+import Dado
+import RegrasDePontuacao
 
 class JogadorTeste(unittest.TestCase):
     def testa_01_funcao_cria_modulo_jogador(self):
@@ -431,8 +443,62 @@ class CartelaTeste(unittest.TestCase):
         self.assertEqual(retorno_esperado, 1)
 
 
+class ArremessoTeste (unittest.TestCase):
+    
+    def teste01(self):
+        print("Caso de Teste 01 Funcao arremessa - Funcao retorna -2 caso já tenham sido escolhido todos os cinco dados que o jogador quer manter")
+        Arremesso.limpa_arremesso()
+        retorno_esperado = Arremesso.arremessa([1,2,3,4,5])
+        
+        self.assertEqual(retorno_esperado, -2)
+        
+    def teste02(self):
+        print("Caso de Teste 02 Funcao arremessa - Funcao retorna -1 caso já tenha chegado ao número limite de arremessos")
+        Arremesso.limpa_arremesso()
+        Arremesso.arremessa([])
+        Arremesso.arremessa([1])
+        Arremesso.arremessa([1,2,3])
+        
+        retorno_esperado = Arremesso.arremessa([1,2,3,4])
+        
+        self.assertEqual(retorno_esperado, -1)
+        
+    def teste03(self):
+        print("Caso de Teste 03 Funcao arremessa - Funcao retorna uma lista com 5 inteiros, testa se a lista tem 5 itens")
+        Arremesso.limpa_arremesso()
+        retorno_esperado = Arremesso.arremessa([])
+
+        self.assertEqual(len(retorno_esperado), 5)
+
+    def teste04(self):
+        print("Caso de Teste 04 Funcao arremessa - Funcao retorna uma lista com 5 inteiros, testa se todos itens da lista sao inteiros")
+        Arremesso.limpa_arremesso()
+        retorno_esperado = Arremesso.arremessa([])
+        
+        self.assertEqual(all(isinstance(n, int) for n in retorno_esperado), True)
+        
+        
+    def teste05(self):
+        print("Caso de Teste 05 Funcao escolhe_dados - Funcao retorna 0 caso o valor escolhido não tenha caido em algum dos dados do arremesso")
+        Arremesso.limpa_arremesso()
+        lValoresGerados = [3,2,4,1,5]
+        Arremesso.lValores = lValoresGerados
+        
+        self.assertEqual(Arremesso.escolhe_dados([3,3,3]),0)
+        
+    def teste06(self):
+        print("Caso de Teste 06 Funcao escolhe_dados - Funcao retorna 1 caso tenha guardado os valores dos dados selecionados pelo usuário")
+        Arremesso.limpa_arremesso()
+        lValoresGerados = [3,2,4,1,5]
+        Arremesso.lValores = lValoresGerados        
+
+        self.assertEqual(Arremesso.escolhe_dados([3,1,5]) ,1)
+   
+
 class DadoTeste (unittest.TestCase):
-    def testa_se_valor_retornado_pela_funcao_jogarDado_eh_valido (self):       
+
+    def teste01 (self):       
+        print("Caso de Teste 01 Funcao jogaDado - Funcao retorna True caso todos os 100 numeros sejam de 1 a 6 ou False caso tenha algum número fora desse intervalo")
         retorno_esperado = True
         
         for i in range(0,100):
@@ -442,3 +508,71 @@ class DadoTeste (unittest.TestCase):
                 retorno_esperado = False
             
         self.assertEqual(retorno_esperado, True)
+        
+
+
+class RegrasDePontuacaoTeste(unittest.TestCase):
+    
+    def transformaEmDicionario (self, lPontuacao):
+        DicPosicoes = {'jogadaDeUm': 0, 'jogadaDeDois' : 0, 'jogadaDeTres': 0, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 0, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 0}
+        
+        i = 0
+        for posicao in DicPosicoes:
+            DicPosicoes[posicao] = lPontuacao[i]
+            i+=1
+            
+        return DicPosicoes
+    
+    def teste01(self):
+        print("Caso de Teste 01 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        retorno_esperado = RegrasDePontuacao.geraPontuacoes([1,3,1,2,1])
+        self.assertEqual(retorno_esperado, {'jogadaDeUm': 3, 'jogadaDeDois' : 2, 'jogadaDeTres': 3, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 0, 'trinca': 8, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 8})
+        
+    def teste02(self):
+        print("Caso de Teste 02 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([2,3,1,2,1]), {'jogadaDeUm': 2, 'jogadaDeDois' : 4, 'jogadaDeTres': 3, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 0, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 9})
+        
+    def teste03(self):
+        print("Caso de Teste 03 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([2,3,1,2,1]), {'jogadaDeUm': 2, 'jogadaDeDois' : 4, 'jogadaDeTres': 3, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 0, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 9} )
+        
+    def teste04(self):
+        print("Caso de Teste 04 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([1,3,1,2,4]), {'jogadaDeUm': 2, 'jogadaDeDois' : 2, 'jogadaDeTres': 3, 'jogadaDeQuatro': 4, 'jogadaDeCinco': 0, 'jogadaDeSeis': 0, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 11})
+    
+    def teste05(self):
+        print("Caso de Teste 05 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([4,5,1,2,6]), {'jogadaDeUm': 1, 'jogadaDeDois' : 2, 'jogadaDeTres': 0, 'jogadaDeQuatro': 4, 'jogadaDeCinco': 5, 'jogadaDeSeis': 6, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 18})
+        
+    def teste06(self):
+        print("Caso de Teste 06 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([4,5,6,2,6]), {'jogadaDeUm': 0, 'jogadaDeDois' : 2, 'jogadaDeTres': 0, 'jogadaDeQuatro': 4, 'jogadaDeCinco': 5, 'jogadaDeSeis': 12, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 23})
+        
+    def teste07(self):
+        print("Caso de Teste 07 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([6,5,6,2,6]), {'jogadaDeUm': 0, 'jogadaDeDois' : 2, 'jogadaDeTres': 0, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 5, 'jogadaDeSeis': 18, 'trinca': 25, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 25})
+        
+    def teste08(self):
+        print("Caso de Teste 08 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([6,6,6,2,6]), {'jogadaDeUm': 0, 'jogadaDeDois' : 2, 'jogadaDeTres': 0, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 24, 'trinca': 26, 'quadra': 26, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 26})
+        
+    def teste09(self):
+        print("Caso de Teste 09 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([6,6,2,2,6]), {'jogadaDeUm': 0, 'jogadaDeDois' : 4, 'jogadaDeTres': 0, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 18, 'trinca': 22, 'quadra': 0, 'fullHouse': 25, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 22})
+    
+    def teste10(self):
+        print("Caso de Teste 10 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([3,2,4,6,5]), {'jogadaDeUm': 0, 'jogadaDeDois' : 2, 'jogadaDeTres': 3, 'jogadaDeQuatro': 4, 'jogadaDeCinco': 5, 'jogadaDeSeis': 6, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 30, 'sequenciaBaixa': 0, 'general': 0, 'jogadaAleatoria': 20})
+        
+    def teste11(self):
+        print("Caso de Teste 11 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([1,3,2,5,4]), {'jogadaDeUm': 1, 'jogadaDeDois' : 2, 'jogadaDeTres': 3, 'jogadaDeQuatro': 4, 'jogadaDeCinco': 5, 'jogadaDeSeis': 0, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 40, 'general': 0, 'jogadaAleatoria': 15})
+        
+    def teste12(self):
+        print("Caso de Teste 12 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([1,1,1,1,1]), {'jogadaDeUm': 5, 'jogadaDeDois' : 0, 'jogadaDeTres': 0, 'jogadaDeQuatro': 0, 'jogadaDeCinco': 0, 'jogadaDeSeis': 0, 'trinca': 5, 'quadra': 5, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 0, 'general': 50, 'jogadaAleatoria': 5})
+        
+    def teste13(self):
+        print("Caso de Teste 13 Funcao geraPontuacoes - Funcao retorna um dicionário com os valores calculados corretos para a lista passada")
+        self.assertEqual(RegrasDePontuacao.geraPontuacoes([1,2,3,4,5]), {'jogadaDeUm': 1, 'jogadaDeDois' : 2, 'jogadaDeTres': 3, 'jogadaDeQuatro': 4, 'jogadaDeCinco': 5, 'jogadaDeSeis': 0, 'trinca': 0, 'quadra': 0, 'fullHouse': 0, 'sequenciaAlta': 0, 'sequenciaBaixa': 40, 'general': 0, 'jogadaAleatoria': 15}
+)

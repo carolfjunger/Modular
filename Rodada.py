@@ -58,6 +58,14 @@ def cria(jogador, numero):
     return 1 
 
 
+'''
+    Definição:
+        Função responsável por limpar a lista de rodadas de uma partida de Yahtzee.
+    Parâmetros:
+    Retorno: 
+        
+'''
+
 def limpa_rodadas():
     while( rodadas != []):
         rodadas.pop()
