@@ -12,7 +12,8 @@
         ACJ             4               03/05/2020          insercao da documentacao faltante
         
 '''
-
+import mysql.connector
+from mysql.connector import Error
 __all__ = ["cria", "limpa_jogadores", "pegaJogadorId", "vinculaPontuacaoFinalAoJogador"]
 
 jogadores = []
@@ -31,22 +32,24 @@ jogadores = []
 '''
 
 
-def cria (nome):
+def cria (nome, connection):
     if (nome == "" ):
         return -1
     if (type(nome) != str):
         return -2
-    for jog in jogadores:
-        if (jog["nome"] == nome):
-            return -3
-    index = len(jogadores) - 1
-    if (index > 0):
-        lastId = jogadores[len(jogadores) - 1]["id"]
-    else:
-        lastId = -1
-    jogador = { "id": lastId + 1, "nome": nome, "totalDePontos": 0}
-    jogadores.append(jogador)
-    return 1
+    if(connection == -1):
+        return -3
+    query = 'INSERT INTO jogadores(nome) VALUES(%s)'
+    try:
+        cursor = connection.cursor()
+        if (cursor):
+            cursor.execute(query, (nome,))
+            connection.commit()
+            return 1
+    except Error as e:
+        print('Erro na cria jogador', e)
+        return -3
+    
 
 '''
     Definição:
@@ -91,18 +94,23 @@ def pegaJogadorId (nome):
         
 '''
 
-def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos):
+def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos, connection):
+    if(existe(jogadorId, connection) != 1):
+        return -1
     if (type(jogadorId) != int):
         return -2
     if (type(totalDePontos) != int):
         return -3
     if (totalDePontos<0):
-        return -4 
-    for jogador in jogadores:
-        if (jogador["id"] == jogadorId):
-            jogador["totalDePontos"] = totalDePontos
-            return 1
-    return -1
+        return -4
+
+    query="UPDATE jogadores SET totalDePontos = %s WHERE id = %s"
+    cursor = connection.cursor()
+    if (cursor):
+        cursor.execute(query, (totalDePontos,jogadorId))
+        connection.commit()
+        return 1
+
 
 
 '''
@@ -116,8 +124,15 @@ def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos):
         
 '''
 
-def existe (jogadorId):
-    for jogador in jogadores:
-        if ( jogador["id"] == jogadorId):
-            return 1
+def existe (jogadorId, connection):
+    query = 'select * from jogadores where id=%s'
+    cursor = connection.cursor()
+    if (cursor):
+        cursor.execute(query, (jogadorId,))
+        row = cursor.fetchone()
+        print(row)
+    if(row is not None):
+        return 1
     return -1
+
+  
