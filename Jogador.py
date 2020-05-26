@@ -14,9 +14,7 @@
 '''
 import mysql.connector
 from mysql.connector import Error
-__all__ = ["cria", "limpa_jogadores", "pegaJogadorId", "vinculaPontuacaoFinalAoJogador"]
-
-jogadores = []
+__all__ = ["cria",  "vinculaPontuacaoFinalAoJogador"]
 
 
 '''
@@ -51,33 +49,6 @@ def cria (nome, connection):
         return -3
     
 
-'''
-    Definição:
-        Função responsável por limpar a lista de jogadores de uma partida de Yahtzee.
-    Parâmetros:
-    Retorno: 
-        
-'''
-
-def limpa_jogadores ():
-    while(jogadores != []):
-        jogadores.pop()
-
-
-
-'''
-    Definição:
-        Função responsável por pegar o id de um jogador a partir do nome.
-    Parâmetros: nome
-    Retorno: String id do jogador
-        
-'''
-
-def pegaJogadorId (nome):
-    for jogador in jogadores:
-        if (jogador["nome"] == nome):
-            return jogador["id"]
-
 
 '''
     Definição:
@@ -111,7 +82,19 @@ def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos, connection):
         connection.commit()
         return 1
 
-
+def pegaInformacoesDoJogador(jogadorId, connection):
+    query = 'select * from jogadores where id=%s'
+    try:
+        cursor = connection.cursor()
+        if (cursor):
+            cursor.execute(query, (jogadorId,))
+            result = cursor.fetchall()
+            if (result is not None):
+                return result[0]
+            return -1           
+    except Error as e:
+        print('Erro na pegaInformacoesDoJogador', e)
+        return -1
 
 '''
     Definição:
