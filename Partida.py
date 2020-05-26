@@ -7,6 +7,7 @@
     Historico de evolucao:
         Autor         Versao            Data              Observacao
         ACJ             1               22/04/2020          criacao das primeiras funcoes
+        ACJ             2               25/05/2020          refatoração do codigo
 
 '''
 

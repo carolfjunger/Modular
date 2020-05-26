@@ -10,6 +10,7 @@
         ACJ             2               26/04/2020          criacao da funcao pegaJogadorId
         ACJ             3               02/05/2020          criacao da funcao existe
         ACJ             4               03/05/2020          insercao da documentacao faltante
+        ACJ             5               25/05/2020          refatoração do codigo
         
 '''
 import mysql.connector
