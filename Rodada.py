@@ -7,12 +7,43 @@
     Historico de evolucao:
         Autor         Versao            Data              Observacao
         ACJ             1               23/04/2020          criacao das primeiras funcoes
+        ACJ             2               26/05/2020          refatoração do codigo
         
 '''
 
 __all__ = ["cria", "limpa_rodadas", "finaliza"]
 
 rodadas = []
+
+import mysql.connector
+from mysql.connector import Error
+from Principal import conecatarNoBD
+
+'''
+    Definição:
+        Função responsável por verificar se o jogador já está numa rodada ativa
+    Parâmetros: 
+        jogadorId: id do jogador
+        partidaId: id da partida
+    Retorno: 
+        1: caso o jogador esteja
+        -1: caso o jogador nao esteja
+        
+'''
+
+def existe (jogadorId, partidaId, numero, connection):
+    query = 'select * from rodadas where numero=%s and jogador_id=%s and partida_id=%s'
+    cursor = connection.cursor()
+    if (cursor):
+        cursor.execute(query, (numero,jogadorId,partidaId))
+        row = cursor.fetchall()
+        print('row')
+        print(row)
+        if(row != []):
+            return row[0]
+    return -1
+
+  
 
 
 '''
@@ -33,11 +64,7 @@ rodadas = []
 '''
 
 
-def cria(jogador, numero):
-    if (type(jogador) != dict ):
-        return -1
-    elif (jogador == {}):
-        return -2
+def cria(jogadorId, partidaId,numero, connection):
     if ( type(numero) == int):
         if(numero<1):
             return -4
@@ -45,46 +72,15 @@ def cria(jogador, numero):
             return -5
     else:    
         return -3
-    for rodada in rodadas:
-        if(rodada["ativa"] ==  True):
-            return -6
-    index = len(rodadas) - 1
-    if (index > 0):
-        lastId = rodadas[len(rodadas) - 1]["id"]
-    else:
-        lastId = -1
-    rodada = {"id": lastId + 1, "jogador": jogador["id"], "numero": numero,  "possiveisPontuacoes": [], "ativa": True}
-    rodadas.append(rodada)  
-    return 1 
-
-
-'''
-    Definição:
-        Função responsável por limpar a lista de rodadas de uma partida de Yahtzee.
-    Parâmetros:
-    Retorno: 
-        
-'''
-
-def limpa_rodadas():
-    while( rodadas != []):
-        rodadas.pop()
-
-
-'''
-    Definição:
-        Função responsável por finalizar uma Rodada ativa de uma partida de Yahtzee.
-    Parâmetros:
-        
-    Retorno: 
-        1: caso rodade tenha sido finalizada com sucesso
-        -1: caso nao tem rodada ativa
-
-'''
-
-def finaliza ():
-    for rodada in rodadas:
-        if (rodada["ativa"] == True):
-            rodada["ativa"] = False
-            return 1
+    existeRodada = existe(jogadorId,partidaId, numero, connection)
+    if(existeRodada != -1):
+        return -6
+    query = 'INSERT INTO rodadas(jogador_id, numero, partida_Id) VALUES(%s,%s, %s);'
+    cursor = connection.cursor()
+    if (cursor):
+        cursor.execute(query, (jogadorId, numero, partidaId))
+        connection.commit()     
+        return 1
     return -1
+
+
