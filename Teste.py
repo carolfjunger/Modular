@@ -19,12 +19,10 @@
         AB              10              28/04/2020          atualizacao de testes para regrasDePontuacao com dicionario
         ACJ             11              02/05/2020          criacao dos testes para funcao existe jogador
         ACJ             12              03/04/2020          criacao dos testes restantes
-        
-       
-        
-       
-
-
+        ACJ             13              25/05/2020          refatoração dos testes de jogador e partida
+        ACJ             14              26/05/2020          refatoração dos testes de rodada
+        ACJ             15              30/05/2020          criacao dos testes para iniciarodada
+        ACJ             16              31/05/2020          refatoração dos testes de arremesso
 '''
 
 import unittest
@@ -36,257 +34,287 @@ import Dado
 import Arremesso
 import Dado
 import RegrasDePontuacao
+from Principal import conecatarNoBD
 
 class JogadorTeste(unittest.TestCase):
     def testa_01_funcao_cria_modulo_jogador(self):
         print("Caso de Teste 01 Funcao Cria Jogador - Funcao retorna -1 caso o nome seja uma string vazia")
-        retorno_esperado = Jogador.cria("")
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.cria("", connection)
         self.assertEqual(retorno_esperado, -1)
 
     def testa_02_funcao_cria_modulo_jogador(self):
         print("Caso de Teste 02 Funcao Cria Jogador - Funcao retorna -2 caso o nome nao seja uma string")
-        retorno_esperado = Jogador.cria(1223)
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.cria(1223, connection )
         self.assertEqual(retorno_esperado, -2)
 
     def testa_03_funcao_cria_modulo_jogador(self):
-        print("Caso de Teste 03 Funcao Cria Jogador - Funcao retorna -3 caso ja exista um jogador com esse nome")
-        Jogador.cria("Joao")
-        retorno_esperado = Jogador.cria("Joao")
+        print("Caso de Teste 03 Funcao Cria Jogador - Funcao retorna -3 caso ja a conexao com o banco nao seja estabelecida")
+        connection = -1
+        retorno_esperado = Jogador.cria("Joao", connection)
         self.assertEqual(retorno_esperado, -3)
 
     def testa_04_funcao_cria_modulo_jogador(self):
         print("Caso de Teste 04  Funcao Cria Jogador- Funcao retorna 1 caso o jogador tem sido criado ")
-        retorno_esperado = Jogador.cria("Pedro")
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.cria("Pedro", connection)
         self.assertEqual(retorno_esperado, 1)
-
-    def testa_01_funcao_limpa_jogadores_modulo_jogador(self):
-        print("Caso de Teste 01  Funcao Limpa Jogadores")
-        retorno_esperado=True
-        for i in range(100):
-            Jogador.limpa_jogadores()
-            if (Jogador.jogadores != []):
-                retorno_esperado = False
-                break
-        self.assertEqual(retorno_esperado, True)
-
-    def testa_01_funcao_pegaJogadorId_modulo_jogador(self):
-        print("Caso de Teste 01  Funcao pegaJogadorId")
-        retorno_esperado=True
-        for i in range(100):
-            Jogador.limpa_jogadores()
-            Jogador.cria("Joao")
-            jogadorId = Jogador.pegaJogadorId("Joao")
-            if (jogadorId != 0 ):
-                retorno_esperado = False
-                break
-        self.assertEqual(retorno_esperado, True)
 
     def testa_01_funcao_existe_modulo_jogador(self):
         print("Caso de Teste 01  Funcao Existe Jogador- Funcao retorna -1 caso o jogador nao exista ")
-        Jogador.limpa_jogadores()
-        retorno_esperado = Jogador.existe(25)
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.existe(-1, connection)
         self.assertEqual(retorno_esperado, -1)
 
     def testa_02_funcao_existe_modulo_jogador(self):
         print("Caso de Teste 02  Funcao Existe Jogador- Funcao retorna 1 caso o jogador  exista ")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Pedro")
-        jogadorId = Jogador.pegaJogadorId("Pedro")
-        retorno_esperado = Jogador.existe(jogadorId)
+        connection = conecatarNoBD()
+        Jogador.cria("Pedro", connection)
+        retorno_esperado = Jogador.existe(1, connection)
         self.assertEqual(retorno_esperado, 1)
     
     def testa_01_funcao_vinculaPontuacaoFinalAoJogador_modulo_jogador(self):
         print("Caso de Teste 01 Funcao vinculaPontuacaoFinalAoJogador - Funcao retorna -1 caso o jogador Id nao exista")
-        Jogador.limpa_jogadores()
-        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(0, 25)
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(-3, 25, connection)
         self.assertEqual(retorno_esperado, -1)
 
-    def testa_02_funcao_vinculaPontuacaoFinalAoJogador_modulo_jogador(self):
-        print("Caso de Teste 02 Funcao vinculaPontuacaoFinalAoJogador - Funcao retorna -2 caso o jogador Id nao seja um id")
-        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador("oi", 25)
-        self.assertEqual(retorno_esperado, -2)
 
     def testa_03_funcao_vinculaPontuacaoFinalAoJogador_modulo_jogador(self):
         print("Caso de Teste 03 Funcao vinculaPontuacaoFinalAoJogador - Funcao retorna -3 caso a total de pontos nao seja um int")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(jogadorId, "oi")
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(2, "oi", connection)
         self.assertEqual(retorno_esperado, -3)
 
     def testa_04_funcao_vinculaPontuacaoFinalAoJogador_modulo_jogador(self):
         print("Caso de Teste 04 Funcao vinculaPontuacaoFinalAoJogador - Funcao retorna -4 caso a total de pontos seja menor que 0")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(jogadorId, -1)
+        connection = conecatarNoBD()
+        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(2, -1, connection)
         self.assertEqual(retorno_esperado, -4)
+    
+    def testa_05_funcao_vinculaPontuacaoFinalAoJogador_modulo_jogador(self):
+        print("Caso de Teste 05 Funcao vinculaPontuacaoFinalAoJogador - Funcao retorna 1 caso sucesso")
+        connection = conecatarNoBD()
+        Jogador.cria("Pedro", connection)
+        retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(1, 100, connection)
+        self.assertEqual(retorno_esperado, 1)
     
 
 class PartidaTeste(unittest.TestCase):
-    def teste_01_funcao_cria_modulo_partida(self):
-        print("Caso de Teste 01 Funcao Cria Partida- Funcao retorna -1 caso array de jogadores tenha tamanho menor que 2")
-        retorno_esperado = Partida.cria([])
-        self.assertEqual(retorno_esperado, -1)
-
-    def teste_02_funcao_cria_modulo_partida(self):
-        print("Caso de Teste 02 Funcao Cria Partida - Funcao retorna -1 caso jogadores nao seja um array")
-        retorno_esperado = Partida.cria(1111)
-        self.assertEqual(retorno_esperado, -2)
-
-    def teste_01_funcao_limpa_partidas_modulo_partida(self):
-        print("Caso de Teste 01 Funcao limpa_partidas")
-        retorno_esperado=True
-        for i in range(100):
-            Jogador.limpa_jogadores()
-            Jogador.cria("Joao")
-            Jogador.cria("Pedro")
-            Partida.cria(Jogador.jogadores)
-            Partida.limpa_partidas()
-            if (Partida.partidas != []):
-                retorno_esperado = False
-                break
-        self.assertEqual(retorno_esperado, True)
-
-    def teste_03_funcao_cria_modulo_partida(self):
-        print("Caso de Teste 03 Funcao Cria Partida - Funcao retorna -2 caso ja tenha uma partida ativa")
-        Jogador.limpa_jogadores()
-        Partida.limpa_partidas()
-        Jogador.cria("Joao")
-        Jogador.cria("Pedro")
-        Partida.cria(Jogador.jogadores)
-        retorno_esperado = Partida.cria(Jogador.jogadores)
-        self.assertEqual(retorno_esperado, -3)
-
-    def teste_04_funcao_cria_modulo_partida(self):
-        print("Caso de Teste 04 Funcao Cria Partida - Funcao retorna 1 caso Partida seja criada com os jogadores")
-        Jogador.limpa_jogadores()
-        Partida.limpa_partidas()
-        Jogador.cria("Joao")
-        Jogador.cria("Pedro")
-        retorno_esperado = Partida.cria(Jogador.jogadores)
-        self.assertEqual(retorno_esperado, 1)
-
     def teste_01_funcao_finaliza_modulo_partida(self):
         print("Caso de Teste 01 Funcao Finaliza Partida- Funcao retorna -1 caso nao tenha partidas ativas")
-        Partida.limpa_partidas()
-        retorno_esperado = Partida.finaliza()
+        connection = conecatarNoBD()
+        retorno_esperado = Partida.finaliza(connection)
         self.assertEqual(retorno_esperado, -1)
     
     def teste_02_funcao_finaliza_modulo_partida(self):
         print("Caso de Teste 02 Funcao Finaliza Partida - Funcao retorna 1 caso tenha finalizado a partida")
-        Partida.limpa_partidas()
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        Jogador.cria("Pedro")
-        Partida.cria(Jogador.jogadores)
-        retorno_esperado = Partida.finaliza()
+        connection = conecatarNoBD()
+        Partida.cria([2,3], connection)
+        retorno_esperado = Partida.finaliza(connection)
         self.assertEqual(retorno_esperado, 1)
+    
+    def teste_01_funcao_cria_modulo_partida(self):
+        print("Caso de Teste 01 Funcao Cria Partida- Funcao retorna -1 caso array de jogadores tenha tamanho menor que 2")
+        connection = conecatarNoBD()
+        retorno_esperado = Partida.cria([], connection)
+        self.assertEqual(retorno_esperado, -1)
+
+    def teste_02_funcao_cria_modulo_partida(self):
+        print("Caso de Teste 02 Funcao Cria Partida - Funcao retorna -1 caso jogadores nao seja um array")
+        connection = conecatarNoBD()
+        retorno_esperado = Partida.cria(1111, connection)
+        self.assertEqual(retorno_esperado, -2)
+
+
+    def teste_03_funcao_cria_modulo_partida(self):
+        print("Caso de Teste 03 Funcao Cria Partida - Funcao retorna -2 caso ja tenha uma partida ativa")
+        connection = conecatarNoBD()
+        Jogador.cria("João", connection)
+        Jogador.cria("Pedro", connection)
+        Partida.cria([1,2], connection)
+        retorno_esperado = Partida.cria([1,2], connection)
+        self.assertEqual(retorno_esperado, -3)
+
+    def teste_04_funcao_cria_modulo_partida(self):
+        print("Caso de Teste 04 Funcao Cria Partida - Funcao retorna 1 caso Partida seja criada com os jogadores")
+        connection = conecatarNoBD()
+        Partida.finaliza(connection)
+        Jogador.cria("João", connection)
+        Jogador.cria("Pedro", connection)   
+        retorno_esperado = Partida.cria([1,2], connection)
+        Partida.finaliza(connection)
+        self.assertEqual(retorno_esperado, 1)
+
+
 
     def teste_01_funcao_defineJogadorComMaiorPontuacao_modulo_partida(self):
         print("Caso de Teste 01 Funcao defineJogadorComMaiorPontuacao")
-        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([ { "id": 0, "nome": "Joao", "totalDePontos": 100}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+        connection = conecatarNoBD()
+        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([1,2],11,connection)
 
-        self.assertEqual(retorno_esperado, [{ "id": 1, "nome": "Pedro", "totalDePontos": 200}])
+        self.assertEqual(retorno_esperado, 1)
 
-    def teste_02_funcao_defineJogadorComMaiorPontuacao_modulo_partida(self):
-        print("Caso de Teste 02 Funcao defineJogadorComMaiorPontuacao")
-        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([ { "id": 0, "nome": "Joao", "totalDePontos": 200}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
-
-        self.assertEqual(retorno_esperado, [{ "id": 0, "nome": "Joao", "totalDePontos": 200}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
-
-    def teste_03_funcao_defineJogadorComMaiorPontuacao_modulo_partida(self):
-        print("Caso de Teste 03 Funcao defineJogadorComMaiorPontuacao")
-        retorno_esperado = Partida.defineJogadorComMaiorPontuacao([ { "id": 0, "nome": "Joao", "totalDePontos": 300}, { "id": 1, "nome": "Pedro", "totalDePontos": 200}])
-
-        self.assertEqual(retorno_esperado, [{ "id": 0, "nome": "Joao", "totalDePontos": 300}])
 
 
 class RodadaTeste(unittest.TestCase):
-    def teste_01_funcao_cria_modulo_rodada(self):
-        print("Caso de Teste 01 Funcao Cria Rodada- Funcao retorna -1 caso nao receba jogador")
-        retorno_esperado = Rodada.cria(12234, 1)
+    def teste_01_funcao_existe_modulo_rodada(self):
+        print("Caso de Teste 01 Funcao Existe Rodada- Funcao retorna -1 caso a rodada nao exista")
+        connection = conecatarNoBD()
+        retorno_esperado = Rodada.existe(1,13,-2,connection)
         self.assertEqual(retorno_esperado, -1)
 
-    def teste_02_funcao_cria_modulo_rodada(self):
-        print("Caso de Teste 02 Funcao Cria Rodada- Funcao retorna -2 caso o dicionario nao represente um jogador")
-        retorno_esperado = Rodada.cria({}, 1)
-        self.assertEqual(retorno_esperado, -2)
-
+    def teste_02_funcao_existe_modulo_rodada(self):
+        print("Caso de Teste 02 Funcao Existe Rodada- Funcao retorna 1 caso a rodada  exista")
+        connection = conecatarNoBD()
+        Rodada.cria(1,1,1,connection)
+        retorno_esperado = Rodada.existe(1,1,1,connection)
+        self.assertEqual(retorno_esperado, 1)
+    
     def teste_03_funcao_cria_modulo_rodada(self):
         print("Caso de Teste 03 Funcao Cria Rodada- Funcao retorna -3 caso o numero da rodada nao seja um numero")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        jogador = Jogador.jogadores[0]
-        retorno_esperado = Rodada.cria(jogador, "oi")
+        connection = conecatarNoBD()
+        retorno_esperado = Rodada.cria(1,13,"oi",connection)
         self.assertEqual(retorno_esperado, -3)
 
     def teste_04_funcao_cria_modulo_rodada(self):
         print("Caso de Teste 04 Funcao Cria Rodada- Funcao retorna -4 caso o numero da rodada seja menor que 1")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        jogador = Jogador.jogadores[0]
-        retorno_esperado = Rodada.cria(jogador, 0)
+        connection = conecatarNoBD()
+        retorno_esperado = Rodada.cria(2,13,-1,connection)
         self.assertEqual(retorno_esperado, -4)
 
     def teste_05_funcao_cria_modulo_rodada(self):
         print("Caso de Teste 05 Funcao Cria Rodada- Funcao retorna -5 caso o numero da rodada seja maior que 13")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        jogador = Jogador.jogadores[0]
-        retorno_esperado = Rodada.cria(jogador, 25)
+        connection = conecatarNoBD()
+        retorno_esperado = Rodada.cria(2,13,15,connection)
         self.assertEqual(retorno_esperado, -5)
 
     def teste_06_funcao_cria_modulo_rodada(self):
         print("Caso de Teste 06 Funcao Cria Rodada- Funcao retorna -6 caso ja exista uma rodada ativa")
-        Jogador.limpa_jogadores()
-        Rodada.limpa_rodadas()
-        Jogador.cria("Joao")
-        jogador = Jogador.jogadores[0]
-        Rodada.cria(jogador, 1)
-        retorno_esperado = Rodada.cria(jogador, 2)
+        connection = conecatarNoBD()
+        Rodada.cria(1,1,1,connection)
+        retorno_esperado = Rodada.cria(1,1,1,connection)
         self.assertEqual(retorno_esperado, -6)
 
     def teste_07_funcao_cria_modulo_rodada(self):
         print("Caso de Teste 07 Funcao Cria Rodada- Funcao retorna 1 caso a rodada tenha sido criada com sucesso")
-        Jogador.limpa_jogadores()
-        Rodada.limpa_rodadas()
-        Jogador.cria("Joao")
-        jogador = Jogador.jogadores[0]
-        retorno_esperado = Rodada.cria(jogador, 1)
+        connection = conecatarNoBD()
+        rodada = 0
+        for i in range(1,14):
+            if(Rodada.existe(1,1,i,connection) == -1):
+                rodada = i
+                break
+        retorno_esperado = Rodada.cria(1,1,rodada,connection)
+        if(connection.is_connected):
+            cursor = connection.cursor()
+            if(rodada > 1):
+                query = 'select id from rodadas where jogador_id=%s and partida_id=%s and numero=%s;'
+                cursor.execute(query, (1,1,rodada))
+                result = cursor.fetchone()[0]
+                query1 = 'delete from rodadas where id=%s;'
+                cursor.execute(query1, (result,))
+                connection.commit()
+            
         self.assertEqual(retorno_esperado, 1)
 
-    def teste_01_funcao_limpa_rodadas_modulo_rodada(self):
-        print("Caso de Teste 01 Funcao limpa_rodadas")
-        retorno_esperado=True
-        for i in range(100):
-            Jogador.limpa_jogadores()
-            Rodada.limpa_rodadas()
-            Jogador.cria("Joao")
-            jogador = Jogador.jogadores[0]
-            Rodada.cria(jogador, 1)
-            Rodada.limpa_rodadas()
-            if (Rodada.rodadas != []):
-                retorno_esperado = False
-                break
-        self.assertEqual(retorno_esperado, True)
-    
-    def teste_01_funcao_finaliza_modulo_rodada(self):
-        print("Caso de Teste 01 Funcao Finaliza Rodada- Funcao retorna -1 caso nao tenha rodadas ativas")
-        Rodada.limpa_rodadas()
-        retorno_esperado = Rodada.finaliza()
+    def teste_01_funcao_iniciaRodada_modulo_rodada(self):
+        print("Caso de Teste 01 Funcao IniciaRodada Rodada- Funcao retorna -1 caso a rodada nao exista")
+        connection = conecatarNoBD()
+        query = "select * from rodadas where id=%s"
+        i = 0
+        result = 0
+        cursor = connection.cursor()
+        if (cursor):
+            while (result != []):
+                i += 1
+                cursor.execute(query,(i,))
+                result = cursor.fetchall()
+            retorno_esperado = Rodada.iniciaRodada(i,connection)
+        else:
+            print("Problemas de conexao")
         self.assertEqual(retorno_esperado, -1)
-    
-    def teste_02_funcao_finaliza_modulo_rodada(self):
-        print("Caso de Teste 02 Funcao Finaliza Rodada - Funcao retorna 1 caso tenha finalizado a rodada ativa")
-        Rodada.limpa_rodadas()
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        Jogador.cria("Pedro")
-        jogador = Jogador.jogadores[0]
-        Rodada.cria(jogador, 1)
-        retorno_esperado = Rodada.finaliza()
+
+    # def teste_02_funcao_iniciaRodada_modulo_rodada(self):
+    #     print("Caso de Teste 02 Funcao IniciaRodada Rodada- Funcao retorna -2 caso problemas de conexao no bd")
+    #     connection = conecatarNoBD()
+    #     query = "select * from rodadas where id=%s"
+    #     i = 0
+    #     result = []
+    #     cursor = connection.cursor()
+    #     if (cursor):
+    #         while (result == []):
+    #             i += 1
+    #             cursor.execute(query,(i,))
+    #             result = cursor.fetchall()
+            
+    #     else:
+    #         print("Problemas de conexao")
+    #     retorno_esperado = Rodada.iniciaRodada(i,-1)
+    #     self.assertEqual(retorno_esperado, -2)
+
+    def teste_03_funcao_iniciaRodada_modulo_rodada(self):
+        print("Caso de Teste 03 Funcao IniciaRodada Rodada- Funcao retorna -3 caso o jogador ja tenha pontuado na rodada")
+        connection = conecatarNoBD()
+        query = "select rodada_id from possiveis_pontuaçoes_na_rodada where id=%s"
+        i = 0
+        result = None
+        cursor = connection.cursor()
+        Rodada.iniciaRodada(1,connection)
+        if (cursor):
+            while (result is None):
+                i += 1
+                cursor.execute(query,(i,))
+                result = cursor.fetchone()
+            retorno_esperado = Rodada.iniciaRodada(result[0],connection)
+        else:
+            print("Problemas de conexao")
+        self.assertEqual(retorno_esperado, -3)
+
+    def teste_04_funcao_iniciaRodada_modulo_rodada(self):
+        print("Caso de Teste 04 Funcao IniciaRodada Rodada- Funcao retorna 1 caso sucesso")
+        connection = conecatarNoBD()
+        query = "select rodada_id from possiveis_pontuaçoes_na_rodada where id=%s"
+        i = 0
+        result = 0
+        cursor = connection.cursor()
+        if (cursor):
+            while (result is not None):
+                i += 1
+                cursor.execute(query,(i,))
+                result = cursor.fetchone()
+            query2 = "select * from rodadas where id=%s"
+            cursor.execute(query2,(i,))
+            result = cursor.fetchone()
+            if (result is None):
+                rodada = 0
+                for i in range(1,14):
+                    if(Rodada.existe(1,1,i,connection) == -1):
+                        rodada = i
+                        break
+                Rodada.cria(1,1,rodada,connection)
+                query3 = 'select * from rodadas where numero=%s and jogador_id=%s and partida_id=%s'
+                cursor.execute(query3, (rodada,1,1))
+                rodada_id = cursor.fetchone()[0]
+                retorno_esperado = Rodada.iniciaRodada(rodada_id,connection)
+                query5 = "select id from possiveis_pontuaçoes_na_rodada where rodada_id=%s"
+                cursor.execute(query5, (rodada_id,))
+                pontuacoes  = cursor.fetchall()
+                for pontuacao in pontuacoes:
+                    query6 = 'delete from possiveis_pontuaçoes_na_rodada where id=%s;'
+                    cursor.execute(query6, (pontuacao[0],))
+                    connection.commit()
+                query4 = 'delete from rodadas where id=%s;'
+                cursor.execute(query4, (rodada_id,))
+                connection.commit()
+            else:
+                retorno_esperado = Rodada.iniciaRodada(i,connection)
+
+        else:
+            print("Problemas de conexao")
         self.assertEqual(retorno_esperado, 1)
+
+
 
 
 class CartelaTeste(unittest.TestCase):
@@ -447,52 +475,25 @@ class ArremessoTeste (unittest.TestCase):
     
     def teste01(self):
         print("Caso de Teste 01 Funcao arremessa - Funcao retorna -2 caso já tenham sido escolhido todos os cinco dados que o jogador quer manter")
-        Arremesso.limpa_arremesso()
+         
         retorno_esperado = Arremesso.arremessa([1,2,3,4,5])
         
         self.assertEqual(retorno_esperado, -2)
         
-    def teste02(self):
-        print("Caso de Teste 02 Funcao arremessa - Funcao retorna -1 caso já tenha chegado ao número limite de arremessos")
-        Arremesso.limpa_arremesso()
-        Arremesso.arremessa([])
-        Arremesso.arremessa([1])
-        Arremesso.arremessa([1,2,3])
-        
-        retorno_esperado = Arremesso.arremessa([1,2,3,4])
-        
-        self.assertEqual(retorno_esperado, -1)
-        
     def teste03(self):
         print("Caso de Teste 03 Funcao arremessa - Funcao retorna uma lista com 5 inteiros, testa se a lista tem 5 itens")
-        Arremesso.limpa_arremesso()
+         
         retorno_esperado = Arremesso.arremessa([])
 
         self.assertEqual(len(retorno_esperado), 5)
 
     def teste04(self):
         print("Caso de Teste 04 Funcao arremessa - Funcao retorna uma lista com 5 inteiros, testa se todos itens da lista sao inteiros")
-        Arremesso.limpa_arremesso()
+         
         retorno_esperado = Arremesso.arremessa([])
         
         self.assertEqual(all(isinstance(n, int) for n in retorno_esperado), True)
         
-        
-    def teste05(self):
-        print("Caso de Teste 05 Funcao escolhe_dados - Funcao retorna 0 caso o valor escolhido não tenha caido em algum dos dados do arremesso")
-        Arremesso.limpa_arremesso()
-        lValoresGerados = [3,2,4,1,5]
-        Arremesso.lValores = lValoresGerados
-        
-        self.assertEqual(Arremesso.escolhe_dados([3,3,3]),0)
-        
-    def teste06(self):
-        print("Caso de Teste 06 Funcao escolhe_dados - Funcao retorna 1 caso tenha guardado os valores dos dados selecionados pelo usuário")
-        Arremesso.limpa_arremesso()
-        lValoresGerados = [3,2,4,1,5]
-        Arremesso.lValores = lValoresGerados        
-
-        self.assertEqual(Arremesso.escolhe_dados([3,1,5]) ,1)
    
 
 class DadoTeste (unittest.TestCase):

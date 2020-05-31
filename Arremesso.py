@@ -17,13 +17,7 @@
 import Dado
 import RegrasDePontuacao
 
-__all__ = ["arremessa", "escolhe_dados"]
-
-lValores = []
-lDadosEscolhidos = []
-lArremessos = []
-lPontuacao = []
-
+__all__ = ["arremessa"]
 
 
 
@@ -44,11 +38,7 @@ def arremessa(lDadosEscolhidos):
     lAux = lDadosEscolhidos
     
     qnt_dados = 5 - len(lDadosEscolhidos)
-    qnt_arremesso = len(lArremessos)
-  
-    if qnt_arremesso == 3:
-        return -1
-    
+
     if qnt_dados <= 0:
         return -2
     
@@ -56,41 +46,8 @@ def arremessa(lDadosEscolhidos):
         lAux.append(Dado.jogaDado())   
     
     lValores = lAux
-    lPontuacao.append(RegrasDePontuacao.geraPontuacoes(lValores))
-    
-    lArremessos.append(lValores)
-    
+
     return lValores
 
-'''
-    Definição:
-        Função responsável por guardar os dados que o jogador irá manter em uma rodada em um jogo de Yathzee.
-    Parâmetros:
-        lDados: Lista com dados selecionados pelo jogador
-    Retorno: 
-        0: caso o jogador tenha selecionado um valor que não tinha caido
-        1: Funcionou guardar os dados selecionados na lista lDadosEscolhidos
-'''
-    
-def escolhe_dados(lDados):
-    lAuxiliar = lValores
-    for dado in lDados:
-        if(dado not in lAuxiliar):
-            return 0
-        else:
-            lAuxiliar.remove(dado)
-    
-    lDadosEscolhidos.append(lDados)
-    return 1
 
-'''
-    Definição:
-        Função responsável por limpar a lista de arremessos de uma partida de Yahtzee.
-    Parâmetros:
-    Retorno: 
-        
-'''
 
-def limpa_arremesso():
-    while (lArremessos != []):
-        lArremessos.pop()

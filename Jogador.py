@@ -11,6 +11,7 @@
         ACJ             3               02/05/2020          criacao da funcao existe
         ACJ             4               03/05/2020          insercao da documentacao faltante
         ACJ             5               25/05/2020          refatoração do codigo
+        ACJ             6               31/05/2020          correcao de erros
         
 '''
 import mysql.connector
@@ -67,14 +68,15 @@ def cria (nome, connection):
 '''
 
 def vinculaPontuacaoFinalAoJogador (jogadorId, totalDePontos, connection):
-    if(existe(jogadorId, connection) != 1):
-        return -1
+    
     if (type(jogadorId) != int):
         return -2
     if (type(totalDePontos) != int):
         return -3
     if (totalDePontos<0):
         return -4
+    if(existe(jogadorId, connection) != 1):
+        return -1
 
     query="UPDATE jogadores SET totalDePontos = %s WHERE id = %s"
     cursor = connection.cursor()
@@ -114,7 +116,6 @@ def existe (jogadorId, connection):
     if (cursor):
         cursor.execute(query, (jogadorId,))
         row = cursor.fetchone()
-        print(row)
     if(row is not None):
         return 1
     return -1

@@ -8,16 +8,19 @@
         Autor         Versao            Data              Observacao
         ACJ             1               23/04/2020          criacao das primeiras funcoes
         ACJ             2               26/05/2020          refatoração do codigo
+        ACJ             3               31/05/2020          criacao do iniciaRodada
         
 '''
 
-__all__ = ["cria", "limpa_rodadas", "finaliza"]
+__all__ = ["cria", "existe"]
 
 rodadas = []
 
 import mysql.connector
 from mysql.connector import Error
-from Principal import conecatarNoBD
+from Principal import conecatarNoBD, selecionaDados
+from Arremesso import arremessa
+from RegrasDePontuacao import geraPontuacoes
 
 '''
     Definição:
@@ -37,10 +40,8 @@ def existe (jogadorId, partidaId, numero, connection):
     if (cursor):
         cursor.execute(query, (numero,jogadorId,partidaId))
         row = cursor.fetchall()
-        print('row')
-        print(row)
         if(row != []):
-            return row[0]
+            return 1
     return -1
 
   
@@ -84,3 +85,40 @@ def cria(jogadorId, partidaId,numero, connection):
     return -1
 
 
+
+def iniciaRodada(rodadaId, connection):
+    query1 = "select * from rodadas where id=%s"
+    if(connection.is_connected()):
+        cursor = connection.cursor()
+        cursor.execute(query1, (rodadaId,))
+        rodada = cursor.fetchall()
+        if(rodada != []):
+            query2 = "select * from possiveis_pontuaçoes_na_rodada where rodada_id=%s"
+            cursor.execute(query2, (rodadaId,))
+            pontuacaoNaRodada = cursor.fetchall()
+            if (pontuacaoNaRodada != []):
+                return -3 # caso o jogador já tenha pontuado nessa rodada
+            dados = []
+            for i in range(1,4):
+                dadosResultantes = arremessa(dados)
+                pontuacoesAtuais = geraPontuacoes(dadosResultantes)
+                dados = selecionaDados(dadosResultantes)
+                if (len(dados) == 5 or i == 3 ):
+                    for key in pontuacoesAtuais.keys():
+                        if(pontuacoesAtuais[key] != 0): # salva no banco somente as posições em que o jogador pontua alguma coisa, ou seja, pontua algo diferente de zero
+                            try:
+                                query3 = 'INSERT INTO possiveis_pontuaçoes_na_rodada(rodada_id, pontuacaoName, pontuacaoValor) VALUES(%s,%s, %s);'
+                                pontuacaoPontos = pontuacoesAtuais[key]
+                                pontuacaoNome = key
+                                cursor.execute(query3, (rodadaId,pontuacaoNome, pontuacaoPontos))
+                                connection.commit()
+                                if (cursor.rowcount != 1):
+                                    return -4 #erro na inserção de uma possivel pontuacao
+                            except Error as e:
+                                print("Erro ao inserir tupla {}".format(e))
+                                return -4 #erro na inserção de uma possivel pontuacao
+        else:
+            return -1
+    else:
+        return -2 #erro ao conectar no bd
+    return 1
