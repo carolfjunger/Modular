@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<jogadores>
+  <jogador>
+    2
+    <jogadaDeUm>1</jogadaDeUm>
+    <jogadaDeDois>-1</jogadaDeDois>
+    <jogadaDeTres>-1</jogadaDeTres>
+    <jogadaDeQuatro>-1</jogadaDeQuatro>
+    <jogadaDeCinco>-1</jogadaDeCinco>
+    <jogadaDeSeis>-1</jogadaDeSeis>
+    <trinca>-1</trinca>
+    <quadra>-1</quadra>
+    <fullHouse>-1</fullHouse>
+    <sequenciaBaixa>-1</sequenciaBaixa>
+    <sequenciaAlta>-1</sequenciaAlta>
+    <general>-1</general>
+    <jogadaAleatoria>-1</jogadaAleatoria>
+  </jogador>
+  <jogador>
+    3
+    <jogadaDeUm>-1</jogadaDeUm>
+    <jogadaDeDois>-1</jogadaDeDois>
+    <jogadaDeTres>-1</jogadaDeTres>
+    <jogadaDeQuatro>-1</jogadaDeQuatro>
+    <jogadaDeCinco>-1</jogadaDeCinco>
+    <jogadaDeSeis>-1</jogadaDeSeis>
+    <trinca>-1</trinca>
+    <quadra>-1</quadra>
+    <fullHouse>-1</fullHouse>
+    <sequenciaBaixa>-1</sequenciaBaixa>
+    <sequenciaAlta>-1</sequenciaAlta>
+    <general>-1</general>
+    <jogadaAleatoria>-1</jogadaAleatoria>
+  </jogador>
+</jogadores>

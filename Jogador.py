@@ -51,7 +51,6 @@ def cria (nome, connection):
         return -3
     
 
-
 '''
     Definição:
         Função responsável por vincular a soma da pontuacao da cartela ao jogador.
@@ -120,4 +119,25 @@ def existe (jogadorId, connection):
         return 1
     return -1
 
-  
+'''
+ Definição:
+        Função responsável por pegar todos os jogadores participantes de uma partida de Yatzhee
+    Parâmetros: 
+        connection: conecta ao banco de dados
+    Retorno:
+        -1: caso lista vazia
+'''
+
+def pegaTodos(partida_id, connection):
+    query = 'select jogador_id from jogador_na_partida where partida_id=%s'
+    cursor = connection.cursor()
+    if (cursor):
+        cursor.execute(query,(partida_id,))
+        result = cursor.fetchall()
+        if (result is not None):
+            return result
+        return -1
+    
+    
+    
+    

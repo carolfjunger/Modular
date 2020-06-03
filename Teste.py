@@ -21,8 +21,12 @@
         ACJ             12              03/04/2020          criacao dos testes restantes
         ACJ             13              25/05/2020          refatoração dos testes de jogador e partida
         ACJ             14              26/05/2020          refatoração dos testes de rodada
-        ACJ             15              30/05/2020          criacao dos testes para iniciarodada
-        ACJ             16              31/05/2020          refatoração dos testes de arremesso
+        AB              15              26/05/2020          refatoracao dos testes de cartela
+        ACJ             16              30/05/2020          criacao dos testes para iniciarodada
+        ACJ             17              31/05/2020          refatoração dos testes de arremesso
+        AB              18              31/05/2020          atualizacao de funcoes
+        AB              18              01/06/2020          atualizacao de funcoes
+        
 '''
 
 import unittest
@@ -98,7 +102,8 @@ class JogadorTeste(unittest.TestCase):
         connection = conecatarNoBD()
         Jogador.cria("Pedro", connection)
         retorno_esperado = Jogador.vinculaPontuacaoFinalAoJogador(1, 100, connection)
-        self.assertEqual(retorno_esperado, 1)
+        self.assertEqual(retorno_esperado, 1)        
+
     
 
 class PartidaTeste(unittest.TestCase):
@@ -235,24 +240,6 @@ class RodadaTeste(unittest.TestCase):
             print("Problemas de conexao")
         self.assertEqual(retorno_esperado, -1)
 
-    # def teste_02_funcao_iniciaRodada_modulo_rodada(self):
-    #     print("Caso de Teste 02 Funcao IniciaRodada Rodada- Funcao retorna -2 caso problemas de conexao no bd")
-    #     connection = conecatarNoBD()
-    #     query = "select * from rodadas where id=%s"
-    #     i = 0
-    #     result = []
-    #     cursor = connection.cursor()
-    #     if (cursor):
-    #         while (result == []):
-    #             i += 1
-    #             cursor.execute(query,(i,))
-    #             result = cursor.fetchall()
-            
-    #     else:
-    #         print("Problemas de conexao")
-    #     retorno_esperado = Rodada.iniciaRodada(i,-1)
-    #     self.assertEqual(retorno_esperado, -2)
-
     def teste_03_funcao_iniciaRodada_modulo_rodada(self):
         print("Caso de Teste 03 Funcao IniciaRodada Rodada- Funcao retorna -3 caso o jogador ja tenha pontuado na rodada")
         connection = conecatarNoBD()
@@ -319,157 +306,40 @@ class RodadaTeste(unittest.TestCase):
 
 class CartelaTeste(unittest.TestCase):
     def teste_01_funcao_cria_modulo_cartela(self):
-        print("Caso de Teste 01 Funcao Cria Cartela- Funcao retorna -1 caso nao receba um Id de jogador como parametro")
-        retorno_esperado = Cartela.cria("")
-        self.assertEqual(retorno_esperado, -1)
-
-    def teste_02_funcao_cria_modulo_cartela(self):
-        print("Caso de Teste 02 Funcao Cria Cartela- Funcao retorna -2 caso nao o Id nao seja vinculado a nenhum jogador existente")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        retorno_esperado = Cartela.cria(50)
-        self.assertEqual(retorno_esperado, -2)
-
-    def teste_03_funcao_cria_modulo_cartela(self):
-        print("Caso de Teste 03 Funcao Cria Cartela- Funcao retorna -3 caso o jogador exista e ja possua uma cartela")
-        Jogador.limpa_jogadores()
-        Jogador.cria("Joao")
-        Cartela.cria(0)
-        retorno_esperado = Cartela.cria(0)
-        self.assertEqual(retorno_esperado, -3)
-
-    def teste_04_funcao_cria_modulo_cartela(self):
-        print("Caso de Teste 04 Funcao Cria Cartela- Funcao retorna 1 caso o jogador exista e ja nao possua uma cartela")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        retorno_esperado = Cartela.cria(0)
+        print("Caso de Teste 01 Funcao Cria Cartela- Funcao retorna 1 caso exista jogadores na partida")
+        connection = conecatarNoBD()
+        retorno_esperado = Cartela.cria(1,connection)
         self.assertEqual(retorno_esperado, 1)
-
-    def teste_01_funcao_limpa_cartelas_modulo_cartela(self):
-        print("Caso de Teste 01 Funcao limpa_cartelas")
-        retorno_esperado=True
-        for i in range(100):
-            Jogador.limpa_jogadores()
-            Cartela.limpa_cartelas()
-            Jogador.cria("Joao")
-            retorno_esperado = Cartela.cria(0)
-            Cartela.limpa_cartelas()
-            if (Cartela.cartelas != []):
-                retorno_esperado = False
-                break
-        self.assertEqual(retorno_esperado, True)
+   
 
     def teste_01_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 01 Funcao Preenche Cartela- Funcao retorna -1 caso nao receba um Id de jogador como parametro")
-        retorno_esperado = Cartela.preenche("", "somaDeUm", 1)
+        print("Caso de Teste 01 Funcao Preenche Cartela- Funcao retorna -1 caso arquivo xml nao tenha sido preenchido corretamente")
+        retorno_esperado = Cartela.preenche(2, 'jogadaDeUm', '-1')
         self.assertEqual(retorno_esperado, -1)
 
+
     def teste_02_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 02 Funcao Preenche Cartela- Funcao retorna -2 caso o Id de jogador nao esteja vinculado a nenhuma cartela")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        retorno_esperado = Cartela.preenche(50,"somaDeUm", 1)
-        self.assertEqual(retorno_esperado, -2)
-
-    def teste_03_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 03 Funcao Preenche Cartela- Funcao retorna -3 caso a posicao na cartela nao seja uma string")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.preenche(jogadorId, 0, 1)
-        self.assertEqual(retorno_esperado, -3)
-
-    def teste_04_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 04 Funcao Preenche Cartela- Funcao retorna -4 caso a posicao na cartela nao exista")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.preenche(jogadorId, "somaDeSete", 1)
-        self.assertEqual(retorno_esperado, -4)
-
-    def teste_05_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 05 Funcao Preenche Cartela- Funcao retorna -5 caso os pontos nao sejam um inteiro")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.preenche(jogadorId, "jogadaDeUm", "oi")
-        self.assertEqual(retorno_esperado, -5)
-
-    def teste_06_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 06 Funcao Preenche Cartela- Funcao retorna -6 caso os pontos sejam um inteiro menor que zero")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.preenche(jogadorId, "jogadaDeUm", -1)
-        self.assertEqual(retorno_esperado, -6)
-
-    def teste_07_funcao_preenche_modulo_cartela(self):
-        print("Caso de Teste 07 Funcao Preenche Cartela- Funcao retorna 1 caso a pontuacao tenha sido preenchidaa com sucesso")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.preenche(jogadorId, "jogadaDeUm", 1)
+        print("Caso de Teste 02 Funcao Preenche Cartela- Funcao retorna 1 caso arquivo xml tenha sido preenchido corretamente")
+        retorno_esperado = Cartela.preenche(2, 'jogadaDeUm', '1')
         self.assertEqual(retorno_esperado, 1)
 
+    def teste_03_funcao_preenche_modulo_cartela(self):
+        print("Caso de Teste 03 Funcao Preenche Cartela- Funcao retorna -2 caso o jogador nao exista")
+        retorno_esperado = Cartela.preenche(1, 'jogadaDeUm', '1')
+        self.assertEqual(retorno_esperado, -2)
+
+   
     def teste_01_funcao_somaPontuacao_modulo_cartela(self):
-        print("Caso de Teste 01 Funcao Soma Pontuacao Cartela- Funcao retorna -1 caso nao receba um Id de jogador como parametro")
-        retorno_esperado = Cartela.somaPontuacao("")
+        print("Caso de Teste 01 Funcao Soma Pontuacao Cartela- Funcao retorna -1 caso o jogador nao tenha cartela")
+        connection = conecatarNoBD()
+        retorno_esperado = Cartela.somaPontuacao('-2', connection)
         self.assertEqual(retorno_esperado, -1)
 
     def teste_02_funcao_somaPontuacao_modulo_cartela(self):
-        print("Caso de Teste 02 Funcao Soma Pontuacao Cartela- Funcao retorna -2 caso o Id de jogador nao esteja vinculado a nenhuma cartela")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.somaPontuacao(50)
-        self.assertEqual(retorno_esperado, -2)
-
-    def teste_03_funcao_somaPontuacao_modulo_cartela(self):
-        print("Caso de Teste 03 Funcao Soma Pontuacao Cartela- Funcao retorna -3 caso de algum erro na funcao vinculaPontuacao")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        retorno_esperado = Cartela.somaPontuacao(jogadorId)
-        self.assertEqual(retorno_esperado, -3)
-    
-    def teste_04_funcao_somaPontuacao_modulo_cartela(self):
-        print("Caso de Teste 04 Funcao Soma Pontuacao Cartela- Funcao retorna 1 caso pontuacao tenha sido somada com sucesso")
-        Jogador.limpa_jogadores()
-        Cartela.limpa_cartelas()
-        Jogador.cria("Joao")
-        jogadorId = Jogador.pegaJogadorId("Joao")
-        Cartela.cria(jogadorId)
-        Cartela.preenche(jogadorId, "jogadaDeUm", 1)
-        Cartela.preenche(jogadorId, "jogadaDeDois", 2)
-        Cartela.preenche(jogadorId, "jogadaDeTres", 3)
-        Cartela.preenche(jogadorId, "jogadaDeQuatro", 4)
-        Cartela.preenche(jogadorId, "jogadaDeCinco", 5)
-        Cartela.preenche(jogadorId, "jogadaDeSeis", 6)
-        Cartela.preenche(jogadorId, "trinca", 3)
-        Cartela.preenche(jogadorId, "quadra", 4)
-        Cartela.preenche(jogadorId, "fullHouse", 25)
-        Cartela.preenche(jogadorId, "sequenciaAlta", 30)
-        Cartela.preenche(jogadorId, "sequenciaBaixa", 40)
-        Cartela.preenche(jogadorId, "general", 50)
-        Cartela.preenche(jogadorId, "jogadaAleatoria", 30)
-        retorno_esperado = Cartela.somaPontuacao(jogadorId)
+        print("Caso de Teste 02 Funcao Soma Pontuacao Cartela- Funcao retorna 1 caso sucesso")
+        connection = conecatarNoBD()
+        retorno_esperado = Cartela.somaPontuacao(2, connection)
         self.assertEqual(retorno_esperado, 1)
-
 
 class ArremessoTeste (unittest.TestCase):
     
