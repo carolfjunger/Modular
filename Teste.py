@@ -39,6 +39,7 @@ import Arremesso
 import Dado
 import RegrasDePontuacao
 from Principal import conecatarNoBD
+import recuperacao
 
 class JogadorTeste(unittest.TestCase):
     def testa_01_funcao_cria_modulo_jogador(self):
@@ -107,11 +108,6 @@ class JogadorTeste(unittest.TestCase):
     
 
 class PartidaTeste(unittest.TestCase):
-    def teste_01_funcao_finaliza_modulo_partida(self):
-        print("Caso de Teste 01 Funcao Finaliza Partida- Funcao retorna -1 caso nao tenha partidas ativas")
-        connection = conecatarNoBD()
-        retorno_esperado = Partida.finaliza(connection)
-        self.assertEqual(retorno_esperado, -1)
     
     def teste_02_funcao_finaliza_modulo_partida(self):
         print("Caso de Teste 02 Funcao Finaliza Partida - Funcao retorna 1 caso tenha finalizado a partida")
@@ -305,26 +301,49 @@ class RodadaTeste(unittest.TestCase):
 
 
 class CartelaTeste(unittest.TestCase):
+
     def teste_01_funcao_cria_modulo_cartela(self):
         print("Caso de Teste 01 Funcao Cria Cartela- Funcao retorna 1 caso exista jogadores na partida")
         connection = conecatarNoBD()
+        cursor = connection.cursor()
+        query = 'select * from jogador_na_partida where partida_id=%s'
+        cursor.execute(query,(1,))
+        result = cursor.fetchall()
+        if(result == []):
+            Jogador.cria('Joao', connection)
+            Jogador.cria('Pedro', connection)
+            Jogador.cria('José', connection)
+            Partida.cria([2,3], connection)
         retorno_esperado = Cartela.cria(1,connection)
         self.assertEqual(retorno_esperado, 1)
-   
 
     def teste_01_funcao_preenche_modulo_cartela(self):
         print("Caso de Teste 01 Funcao Preenche Cartela- Funcao retorna -1 caso arquivo xml nao tenha sido preenchido corretamente")
+        connection = conecatarNoBD()
+        try:
+            dictJogo = recuperacao.load()
+        except:
+            Cartela.cria(1,connection)
         retorno_esperado = Cartela.preenche(2, 'jogadaDeUm', '-1')
         self.assertEqual(retorno_esperado, -1)
 
-
     def teste_02_funcao_preenche_modulo_cartela(self):
         print("Caso de Teste 02 Funcao Preenche Cartela- Funcao retorna 1 caso arquivo xml tenha sido preenchido corretamente")
+        connection = conecatarNoBD()
+        try:
+            dictJogo = recuperacao.load()
+        except:
+            Cartela.cria(1,connection)
         retorno_esperado = Cartela.preenche(2, 'jogadaDeUm', '1')
         self.assertEqual(retorno_esperado, 1)
 
     def teste_03_funcao_preenche_modulo_cartela(self):
         print("Caso de Teste 03 Funcao Preenche Cartela- Funcao retorna -2 caso o jogador nao exista")
+        connection = conecatarNoBD()
+        try:
+            dictJogo = recuperacao.load()
+        except:
+            Cartela.cria(1,connection)
         retorno_esperado = Cartela.preenche(1, 'jogadaDeUm', '1')
         self.assertEqual(retorno_esperado, -2)
 
@@ -332,14 +351,23 @@ class CartelaTeste(unittest.TestCase):
     def teste_01_funcao_somaPontuacao_modulo_cartela(self):
         print("Caso de Teste 01 Funcao Soma Pontuacao Cartela- Funcao retorna -1 caso o jogador nao tenha cartela")
         connection = conecatarNoBD()
+        try:
+            dictJogo = recuperacao.load()
+        except:
+            Cartela.cria(1,connection)
         retorno_esperado = Cartela.somaPontuacao('-2', connection)
         self.assertEqual(retorno_esperado, -1)
 
     def teste_02_funcao_somaPontuacao_modulo_cartela(self):
         print("Caso de Teste 02 Funcao Soma Pontuacao Cartela- Funcao retorna 1 caso sucesso")
         connection = conecatarNoBD()
+        try:
+            dictJogo = recuperacao.load()
+        except:
+            Cartela.cria(1,connection)
         retorno_esperado = Cartela.somaPontuacao(2, connection)
         self.assertEqual(retorno_esperado, 1)
+
 
 class ArremessoTeste (unittest.TestCase):
     

@@ -137,8 +137,6 @@ def defineJogadorComMaiorPontuacao (jogadoresIds, partida_id, connection):
 
 def finaliza (connection):
     partida_id = pegaPartidaAtual(connection)
-    if (partida_id is None):
-        return -1
     query = 'select jogador_id from jogador_na_partida where partida_id = %s'
     query2 = 'UPDATE partidas SET ativa=0 WHERE id=%s'
     try:

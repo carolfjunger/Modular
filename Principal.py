@@ -13,7 +13,7 @@ def selecionaDados(dadosResultantes):
 def conecatarNoBD():
     connection = mysql.connector.connect(host='localhost',
                                             user='root',
-                                            password='M0dul4rinf1301',
+                                            password='root',
                                             database='yathzee')
     if connection.is_connected():
         return connection
