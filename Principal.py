@@ -4,12 +4,15 @@ from tkinter import *
 from tkinter.ttk import *
 from PIL import ImageTk, Image
 import Arremesso
+import recuperacao
 
 __all__ = ["conecatarNoBD", "selecionaDados"]
 
-jogadores = ["maria", "clara"]
-pontuacoes = ['jogadaDeUm', 'jogadaDeDois', 'jogadaDeTres', 'jogadaDeQuatro', 'jogadaDeCinco', 'jogadaDeSeis', 'trinca', 'quadra', 'fullHouse', 'sequenciaAlta', 'sequenciaBaixa', 'general', 'jogadaAleatoria']
+jogadores = [(2,"maria"), (3, "clara")]
+pontuacoesNomes = ['jogadaDeUm', 'jogadaDeDois', 'jogadaDeTres', 'jogadaDeQuatro', 'jogadaDeCinco', 'jogadaDeSeis', 'trinca', 'quadra', 'fullHouse', 'sequenciaAlta', 'sequenciaBaixa', 'general', 'jogadaAleatoria']
 dados = [{ "valor": 1, "selecionado": 0}, { "valor": 2, "selecionado": 0}, { "valor": 3, "selecionado": 0}, { "valor": 4, "selecionado": 0}, { "valor": 5, "selecionado": 0}]
+pontuacoes = recuperacao.load()
+print('pontuacoes', pontuacoes)
 global dice1
 global dice2
 global dice3
@@ -93,12 +96,13 @@ for i in range(height): #Rows
             if (j==0):
                 b = Label(janela, text="Pontuações", width=20)
             else:
-                b = Label(janela, text=jogadores[j - 1], width=20)
+                b = Label(janela, text=jogadores[j - 1][1], width=20)
         else:
             if (j==0):
-                b = Label(janela, text=pontuacoes[i - 1], width=20)
+                b = Label(janela, text=pontuacoesNomes[i - 1], width=20)
             else:
-                b = Label(janela, text="", width=20)
+                pontuacaoJog = pontuacoes[jogadores[j - 1][0]][pontuacoesNomes[i - 1]]
+                b = Label(janela, text=pontuacaoJog, width=20)
         b.grid(row=i, column=j)
 
 # desenhaDados(janela,[1,2,3,4,5])
@@ -115,7 +119,7 @@ imgDados = [imgDado1, imgDado2, imgDado3, imgDado4, imgDado5, imgDado6]
 
 diceList = handleDados(dados,[])
 
-jogadorDaVez = jogadores[0]
+jogadorDaVez = jogadores[0][1]
 jogadorDaVezLabel = Label(janela, text="Está na vez do(a):"+jogadorDaVez)
 jogadorDaVezLabel.grid(row=7,column=5, columnspan=5)
 bt = Button(janela,width=20, text="Jogar Dados", command=lambda: jogaDados(dados))

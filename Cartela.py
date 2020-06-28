@@ -92,7 +92,8 @@ def somaPontuacao (jogadorId, connection):
 
     totalDePontos = 0
     for el in dicJogo[jogadorId]:
-        totalDePontos = totalDePontos + int(dicJogo[jogadorId][el])
+        if(dicJogo[jogadorId][el] != ' ' ):
+            totalDePontos = totalDePontos + int(dicJogo[jogadorId][el])
     
     Jogador.vinculaPontuacaoFinalAoJogador(jogadorId, totalDePontos, connection)
     

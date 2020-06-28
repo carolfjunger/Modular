@@ -11,7 +11,7 @@
 '''
 
 import random
-import exemplo
+
 
 print('chamou')
 __all__ = ["jogaDado"]
@@ -29,6 +29,3 @@ def jogaDado():
     return random.randint(1,6)
 
 
-
-if __name__ == "__main__":
-    exemplo.executa_teste(jogaDado())

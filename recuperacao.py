@@ -25,43 +25,43 @@ def inicializa(lJogadores):
         jogador.text = str(jog)
         
         jogadaDeUm = SubElement(jogador,'jogadaDeUm')
-        jogadaDeUm.text = "-1"
+        jogadaDeUm.text = " "
         
         jogadaDeDois = SubElement(jogador, 'jogadaDeDois')
-        jogadaDeDois.text = "-1"
+        jogadaDeDois.text = " "
         
         jogadaDeTres = SubElement(jogador, 'jogadaDeTres')
-        jogadaDeTres.text = "-1"
+        jogadaDeTres.text = " "
         
         jogadaDeQuatro = SubElement(jogador, 'jogadaDeQuatro')
-        jogadaDeQuatro.text = "-1"
+        jogadaDeQuatro.text = " "
         
         jogadaDeCinco = SubElement(jogador, 'jogadaDeCinco')
-        jogadaDeCinco.text = "-1"
+        jogadaDeCinco.text = " "
         
         jogadaDeSeis = SubElement(jogador, 'jogadaDeSeis')
-        jogadaDeSeis.text = "-1"
+        jogadaDeSeis.text = " "
         
         trinca = SubElement(jogador, 'trinca')
-        trinca.text = "-1"
+        trinca.text = " "
         
         quadra = SubElement(jogador, 'quadra')
-        quadra.text = "-1"
+        quadra.text = " "
         
         fullHouse = SubElement(jogador, 'fullHouse')
-        fullHouse.text = "-1"
+        fullHouse.text = " "
         
         sequenciaBaixa = SubElement(jogador, 'sequenciaBaixa')
-        sequenciaBaixa.text = "-1"
+        sequenciaBaixa.text = " "
         
         sequenciaAlta = SubElement(jogador,'sequenciaAlta')
-        sequenciaAlta.text = "-1"
+        sequenciaAlta.text = " "
         
         general = SubElement(jogador, 'general')
-        general.text = "-1"
+        general.text = " "
         
         jogadaAleatoria = SubElement(jogador,'jogadaAleatoria')
-        jogadaAleatoria.text = "-1"
+        jogadaAleatoria.text = " "
 
 
     nome_arquivo = 'recuperacao.xml'
