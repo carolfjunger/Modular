@@ -15,7 +15,7 @@ def main():
     try:
         connection = mysql.connector.connect(host='localhost',
                                             user='root',
-                                            password='root')
+                                            password='M0dul4rinf1301')
         if connection.is_connected():
             cursor = connection.cursor()
             cursor.execute("CREATE DATABASE yathzee")

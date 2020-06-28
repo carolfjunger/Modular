@@ -34,20 +34,24 @@ __all__ = ["arremessa"]
 '''
 
 
-def arremessa(lDadosEscolhidos):
-    lAux = lDadosEscolhidos
+def arremessa(dados):
+    lAux = dados
+    for dado in lAux:
+        if(dado["selecionado"] == 0):
+            dado['valor'] = Dado.jogaDado()
+    # lAux = lDadosEscolhidos
     
-    qnt_dados = 5 - len(lDadosEscolhidos)
+    # qnt_dados = 5 - len(lDadosEscolhidos)
 
-    if qnt_dados <= 0:
-        return -2
+    # if qnt_dados <= 0:
+    #     return -2
     
-    for i in range(0,qnt_dados):
-        lAux.append(Dado.jogaDado())   
+    # for i in range(0,qnt_dados):
+    #     lAux.append(Dado.jogaDado())   
     
-    lValores = lAux
-
-    return lValores
+    # lValores = lAux
+    print('chamou')
+    return lAux
 
 
 
