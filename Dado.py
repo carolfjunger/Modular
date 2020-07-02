@@ -12,8 +12,6 @@
 
 import random
 
-
-print('chamou')
 __all__ = ["jogaDado"]
 
 '''

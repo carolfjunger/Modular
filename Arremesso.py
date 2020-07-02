@@ -50,7 +50,7 @@ def arremessa(dados):
     #     lAux.append(Dado.jogaDado())   
     
     # lValores = lAux
-    print('chamou')
+   
     return lAux
 
 

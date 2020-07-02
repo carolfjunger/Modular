@@ -12,13 +12,13 @@
         
 '''
 
-__all__ = ["cria", "existe"]
+__all__ = ["cria", "existe", "defineJogadorDaVez"]
 
 rodadas = []
 
 import mysql.connector
 from mysql.connector import Error
-from Principal import conecatarNoBD, selecionaDados
+# import Principal
 from Arremesso import arremessa
 from RegrasDePontuacao import geraPontuacoes
 
@@ -35,13 +35,13 @@ from RegrasDePontuacao import geraPontuacoes
 '''
 
 def existe (jogadorId, partidaId, numero, connection):
-    query = 'select * from rodadas where numero=%s and jogador_id=%s and partida_id=%s'
+    query = 'select id from rodadas where numero=%s and jogador_id=%s and partida_id=%s'
     cursor = connection.cursor()
     if (cursor):
         cursor.execute(query, (numero,jogadorId,partidaId))
-        row = cursor.fetchall()
-        if(row != []):
-            return 1
+        row = cursor.fetchone()
+        if(row is not None):
+            return row[0]
     return -1
 
   
@@ -84,7 +84,24 @@ def cria(jogadorId, partidaId,numero, connection):
         return 1
     return -1
 
-
+def definePontucoesAtuais(pontuacoesAtuais, rodadaId,connection):
+    cursor = connection.cursor()
+    for key in pontuacoesAtuais.keys():
+        if(pontuacoesAtuais[key] != 0): # salva no banco somente as posições em que o jogador pontua alguma coisa, ou seja, pontua algo diferente de zero
+            try:
+                print('pontuacoesAtuais[key]', pontuacoesAtuais[key])
+                print('pontuacaoNome', key)
+                query3 = 'INSERT INTO possiveis_pontuaçoes_na_rodada(rodada_id, pontuacaoName, pontuacaoValor) VALUES(%s,%s, %s);'
+                pontuacaoPontos = pontuacoesAtuais[key]
+                pontuacaoNome = key
+                cursor.execute(query3, (rodadaId,pontuacaoNome, pontuacaoPontos))
+                connection.commit()
+                if (cursor.rowcount != 1):
+                    return -4 #erro na inserção de uma possivel pontuacao
+            except Error as e:
+                print("Erro ao inserir tupla {}".format(e))
+                return -4 #erro na inserção de uma possivel pontuacao
+    return 1
 
 def iniciaRodada(rodadaId, connection):
     query1 = "select * from rodadas where id=%s"
@@ -98,27 +115,91 @@ def iniciaRodada(rodadaId, connection):
             pontuacaoNaRodada = cursor.fetchall()
             if (pontuacaoNaRodada != []):
                 return -3 # caso o jogador já tenha pontuado nessa rodada
-            dados = []
+            # dados = [1,2,3,4,5]
             for i in range(1,4):
-                dadosResultantes = arremessa(dados)
+                dadosResultantes = [1,2,3,4,5]# arremessa(dados)
                 pontuacoesAtuais = geraPontuacoes(dadosResultantes)
-                dados = selecionaDados(dadosResultantes)
-                if (len(dados) == 5 or i == 3 ):
-                    for key in pontuacoesAtuais.keys():
-                        if(pontuacoesAtuais[key] != 0): # salva no banco somente as posições em que o jogador pontua alguma coisa, ou seja, pontua algo diferente de zero
-                            try:
-                                query3 = 'INSERT INTO possiveis_pontuaçoes_na_rodada(rodada_id, pontuacaoName, pontuacaoValor) VALUES(%s,%s, %s);'
-                                pontuacaoPontos = pontuacoesAtuais[key]
-                                pontuacaoNome = key
-                                cursor.execute(query3, (rodadaId,pontuacaoNome, pontuacaoPontos))
-                                connection.commit()
-                                if (cursor.rowcount != 1):
-                                    return -4 #erro na inserção de uma possivel pontuacao
-                            except Error as e:
-                                print("Erro ao inserir tupla {}".format(e))
-                                return -4 #erro na inserção de uma possivel pontuacao
+                # dados = selecionaDados(dadosResultantes)
+                if ( i == 3 ):
+                    pontStatus = definePontucoesAtuais(pontuacoesAtuais, rodadaId, connection)
+                    if (pontStatus != 1):
+                        return -4
         else:
             return -1
     else:
         return -2 #erro ao conectar no bd
     return 1
+
+def pegaPontuacoesNaRodada(rodadaId, connection):
+    query = 'select pontuacaoName, pontuacaoValor from possiveis_pontuaçoes_na_rodada where rodada_id=%s'
+    cursor = connection.cursor()
+    if(cursor):
+        cursor.execute(query, (rodadaId,))
+        row = cursor.fetchall()
+        print('row', row)
+        if(row == []):
+            return -1 # nenhuma pontuacao encontrada
+        return row
+    else:
+        return -2 # problema de conexao no bd
+
+
+def handleRodada(rodadaId, dados, arremessoCount, connection):
+    query1 = "select * from rodadas where id=%s"
+    if(connection.is_connected()):
+        cursor = connection.cursor()
+        cursor.execute(query1, (rodadaId,))
+        rodada = cursor.fetchall()
+        if(rodada != []):
+            pontuacaoNaRodada = pegaPontuacoesNaRodada(rodadaId, connection)
+            if (pontuacaoNaRodada != -1 and pontuacaoNaRodada != -2):
+                return -3 # caso o jogador já tenha pontuado nessa rodada
+            # dados = [1,2,3,4,5]     
+            dadosResultantes = arremessa(dados)
+            dadosValue = []
+            for dado in dadosResultantes:
+                dadosValue.append(dado["valor"])
+            pontuacoesAtuais = geraPontuacoes(dadosValue)
+            # dados = selecionaDados(dadosResultantes)
+            if ( arremessoCount == 2 ):
+                pontStatus = definePontucoesAtuais(pontuacoesAtuais, rodadaId, connection)
+                if (pontStatus != 1):
+                    return -4
+        else:
+            return -1
+    else:
+        return -2 #erro ao conectar no bd
+    print('dados', dadosResultantes )
+    return dadosResultantes
+
+
+
+def pegaUltimaRodada(partidaId, jogadorId, connection):
+    query = 'select id, numero from rodadas where jogador_id=%s and partida_id=%s ORDER BY numero DESC LIMIT 1'
+    cursor = connection.cursor()
+    if (cursor):
+        cursor.execute(query, (jogadorId,partidaId))
+        row = cursor.fetchone()
+        if(row is not None):
+            return row
+    return -1
+
+def defineJogadorDaVez(partidaId, jogadores, connection):
+    numeroJog1 = pegaUltimaRodada(partidaId, jogadores[0][0], connection)
+    numeroJog2 = pegaUltimaRodada(partidaId, jogadores[1][0], connection)
+    if (numeroJog1 != -1 and numeroJog2 != -1):
+        if(numeroJog1 == numeroJog2):
+            return jogadores[0]
+        return jogadores[1]
+    return jogadores[0]
+
+# def conecatarNoBD():
+#     connection = mysql.connector.connect(host='localhost',
+#                                             user='root',
+#                                             password='M0dul4rinf1301',
+#                                             database='yathzee')
+#     if connection.is_connected():
+#         return connection
+#     return -1
+
+# print('pega', pegaPontuacoesNaRodada(1, conecatarNoBD()))
