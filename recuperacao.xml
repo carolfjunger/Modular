@@ -2,34 +2,34 @@
 <jogadores>
   <jogador>
     2
-    <jogadaDeUm> </jogadaDeUm>
-    <jogadaDeDois> </jogadaDeDois>
-    <jogadaDeTres> </jogadaDeTres>
-    <jogadaDeQuatro> </jogadaDeQuatro>
-    <jogadaDeCinco>10</jogadaDeCinco>
-    <jogadaDeSeis> </jogadaDeSeis>
-    <trinca>13</trinca>
-    <quadra> </quadra>
-    <fullHouse> </fullHouse>
-    <sequenciaBaixa> </sequenciaBaixa>
-    <sequenciaAlta>30</sequenciaAlta>
-    <general> </general>
-    <jogadaAleatoria> </jogadaAleatoria>
+    <jogadaDeUm>1</jogadaDeUm>
+    <jogadaDeDois>0</jogadaDeDois>
+    <jogadaDeTres>3</jogadaDeTres>
+    <jogadaDeQuatro>0</jogadaDeQuatro>
+    <jogadaDeCinco>5</jogadaDeCinco>
+    <jogadaDeSeis>0</jogadaDeSeis>
+    <trinca>0</trinca>
+    <quadra>0</quadra>
+    <fullHouse>0</fullHouse>
+    <sequenciaBaixa>0</sequenciaBaixa>
+    <sequenciaAlta>0</sequenciaAlta>
+    <general>0</general>
+    <jogadaAleatoria>20</jogadaAleatoria>
   </jogador>
   <jogador>
     3
-    <jogadaDeUm>2</jogadaDeUm>
-    <jogadaDeDois> </jogadaDeDois>
-    <jogadaDeTres> </jogadaDeTres>
-    <jogadaDeQuatro>8</jogadaDeQuatro>
-    <jogadaDeCinco> </jogadaDeCinco>
-    <jogadaDeSeis>18</jogadaDeSeis>
-    <trinca> </trinca>
-    <quadra> </quadra>
-    <fullHouse> </fullHouse>
-    <sequenciaBaixa> </sequenciaBaixa>
-    <sequenciaAlta> </sequenciaAlta>
-    <general> </general>
-    <jogadaAleatoria> </jogadaAleatoria>
+    <jogadaDeUm>0</jogadaDeUm>
+    <jogadaDeDois>2</jogadaDeDois>
+    <jogadaDeTres>3</jogadaDeTres>
+    <jogadaDeQuatro>4</jogadaDeQuatro>
+    <jogadaDeCinco>0</jogadaDeCinco>
+    <jogadaDeSeis>6</jogadaDeSeis>
+    <trinca>12</trinca>
+    <quadra>0</quadra>
+    <fullHouse>0</fullHouse>
+    <sequenciaBaixa>0</sequenciaBaixa>
+    <sequenciaAlta>0</sequenciaAlta>
+    <general>0</general>
+    <jogadaAleatoria>19</jogadaAleatoria>
   </jogador>
 </jogadores>

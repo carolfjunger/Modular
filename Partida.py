@@ -11,9 +11,9 @@
 
 '''
 
-__all__ = ["cria", "finaliza"]
+__all__ = ["cria", "finaliza", "pegaJogadorCampeao"]
 
-# from Principal import conecatarNoBD
+from ConectarBD import conecatarNoBD
 from mysql.connector import Error
 import Jogador
 
@@ -135,8 +135,8 @@ def defineJogadorComMaiorPontuacao (jogadoresIds, partida_id, connection):
 '''
 
 
-def finaliza (connection):
-    partida_id = pegaPartidaAtual(connection)
+def finaliza (partida_id, connection):
+    # partida_id = pegaPartidaAtual(connection)
     query = 'select jogador_id from jogador_na_partida where partida_id = %s'
     query2 = 'UPDATE partidas SET ativa=0 WHERE id=%s'
     try:
@@ -158,3 +158,26 @@ def finaliza (connection):
     except Error as e:
         print('Erro na pegaPartidaAtual', e)
         return -1
+
+
+def pegaJogadorCampeao(partidaId, connection):
+    query = 'select jogador_id, campeao from jogador_na_partida where partida_id=%s'
+    cursor = connection.cursor()
+    if(cursor):
+        cursor.execute(query, (partidaId,))
+        records = cursor.fetchall()
+        jogadorId = -1
+        for row in records:
+            if(row[1] == 1):
+                jogadorId = row[0]
+        if (jogadorId != -1):
+            query2 = 'select nome, totalDepontos from jogadores where id=%s'
+            cursor.execute(query2, (jogadorId,))
+            row = cursor.fetchone()
+            return row
+        else:
+            return -1
+    else:
+        return -2
+
+pegaJogadorCampeao(1, conecatarNoBD())

@@ -123,27 +123,30 @@ def save(dicJogo):
  
     
 def load():
-    with open('recuperacao.xml', 'rt') as f:
-        tree = ElementTree.parse(f)
-        root = tree.getroot()
+    try:
+        with open('recuperacao.xml', 'rt') as f:
+            tree = ElementTree.parse(f)
+            root = tree.getroot()
+            
+        dict_jogadores = {}
         
-    dict_jogadores = {}
-    
-    for jogador in root.findall('jogador'):
-        dict_auxiliar = {}
-        dict_auxiliar['jogadaDeUm'] = (jogador.find('jogadaDeUm').text)
-        dict_auxiliar['jogadaDeDois'] = (jogador.find('jogadaDeDois').text)
-        dict_auxiliar['jogadaDeTres'] = (jogador.find('jogadaDeTres').text)
-        dict_auxiliar['jogadaDeQuatro'] = (jogador.find('jogadaDeQuatro').text)
-        dict_auxiliar['jogadaDeCinco'] = (jogador.find('jogadaDeCinco').text)
-        dict_auxiliar['jogadaDeSeis'] = (jogador.find('jogadaDeSeis').text)
-        dict_auxiliar['trinca'] = (jogador.find('trinca').text)
-        dict_auxiliar['quadra'] = (jogador.find('quadra').text)
-        dict_auxiliar['fullHouse'] = (jogador.find('fullHouse').text)
-        dict_auxiliar['sequenciaBaixa'] = (jogador.find('sequenciaBaixa').text)
-        dict_auxiliar['sequenciaAlta'] = (jogador.find('sequenciaAlta').text)
-        dict_auxiliar['general'] = (jogador.find('general').text)
-        dict_auxiliar['jogadaAleatoria'] = (jogador.find('jogadaAleatoria').text)
-        dict_jogadores[int(jogador.text)] = dict_auxiliar
-        
-    return dict_jogadores
+        for jogador in root.findall('jogador'):
+            dict_auxiliar = {}
+            dict_auxiliar['jogadaDeUm'] = (jogador.find('jogadaDeUm').text)
+            dict_auxiliar['jogadaDeDois'] = (jogador.find('jogadaDeDois').text)
+            dict_auxiliar['jogadaDeTres'] = (jogador.find('jogadaDeTres').text)
+            dict_auxiliar['jogadaDeQuatro'] = (jogador.find('jogadaDeQuatro').text)
+            dict_auxiliar['jogadaDeCinco'] = (jogador.find('jogadaDeCinco').text)
+            dict_auxiliar['jogadaDeSeis'] = (jogador.find('jogadaDeSeis').text)
+            dict_auxiliar['trinca'] = (jogador.find('trinca').text)
+            dict_auxiliar['quadra'] = (jogador.find('quadra').text)
+            dict_auxiliar['fullHouse'] = (jogador.find('fullHouse').text)
+            dict_auxiliar['sequenciaBaixa'] = (jogador.find('sequenciaBaixa').text)
+            dict_auxiliar['sequenciaAlta'] = (jogador.find('sequenciaAlta').text)
+            dict_auxiliar['general'] = (jogador.find('general').text)
+            dict_auxiliar['jogadaAleatoria'] = (jogador.find('jogadaAleatoria').text)
+            dict_jogadores[int(jogador.text)] = dict_auxiliar
+            
+        return dict_jogadores
+    except:
+        return -1

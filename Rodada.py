@@ -184,12 +184,12 @@ def pegaUltimaRodada(partidaId, jogadorId, connection):
     return -1
 
 def defineJogadorDaVez(partidaId, jogadores, connection):
-    numeroJog1 = pegaUltimaRodada(partidaId, jogadores[0][0], connection)[1]
-    numeroJog2 = pegaUltimaRodada(partidaId, jogadores[1][0], connection)[1]
+    numeroJog1 = pegaUltimaRodada(partidaId, jogadores[0][0], connection)
+    numeroJog2 = pegaUltimaRodada(partidaId, jogadores[1][0], connection)
     print('numeroJog1', numeroJog1)
     print('numeroJog2', numeroJog2)
     if (numeroJog1 != -1 and numeroJog2 != -1):
-        if(numeroJog1 == numeroJog2):
+        if(numeroJog1[1] == numeroJog2[1]):
             return jogadores[0]
         return jogadores[1]
     elif (numeroJog2 == -1 and numeroJog1 != -1):

@@ -113,7 +113,7 @@ class PartidaTeste(unittest.TestCase):
         print("Caso de Teste 02 Funcao Finaliza Partida - Funcao retorna 1 caso tenha finalizado a partida")
         connection = conecatarNoBD()
         Partida.cria([2,3], connection)
-        retorno_esperado = Partida.finaliza(connection)
+        retorno_esperado = Partida.finaliza(1,connection)
         self.assertEqual(retorno_esperado, 1)
     
     def teste_01_funcao_cria_modulo_partida(self):
@@ -141,11 +141,11 @@ class PartidaTeste(unittest.TestCase):
     def teste_04_funcao_cria_modulo_partida(self):
         print("Caso de Teste 04 Funcao Cria Partida - Funcao retorna 1 caso Partida seja criada com os jogadores")
         connection = conecatarNoBD()
-        Partida.finaliza(connection)
+        Partida.finaliza(1,connection)
         Jogador.cria("João", connection)
         Jogador.cria("Pedro", connection)   
         retorno_esperado = Partida.cria([1,2], connection)
-        Partida.finaliza(connection)
+        Partida.finaliza(1,connection)
         self.assertEqual(retorno_esperado, 1)
 
 
