@@ -72,7 +72,17 @@ def jogaDados(dados):
             if(resposta == 'ok'):
                 janela.destroy()
     rodada = Rodada.pegaUltimaRodada(partidaId, jogadorDaVez[0], connection)
+    if(rodada == -1):
+        resposta = messagebox.showerror('ERRO', 'erro pegaUltimaRodada')
+        if(resposta == 'ok'):
+            janela.destroy()
+
     lDadosAux = Rodada.handleRodada(rodada[0], dados, arremessoCount, connection)
+    if(isinstance(lDadosAux, int) == True):
+        resposta = messagebox.showerror('ERRO', 'erro handleRodada'+str(lDadosAux))
+        if(resposta == 'ok'):
+            janela.destroy()
+
     # exibe as possiveis pontuaçoes
     dados = lDadosAux
     clearDados(diceList)
@@ -85,6 +95,10 @@ def jogaDados(dados):
         botaoJogarDados = Button(janela,width=19, text="Jogar Dados", command=lambda: jogaDados(dados), state=DISABLED)
         botaoJogarDados.grid(row=15, column=0, columnspan=5, sticky=W)
         pontuacoesRodada = Rodada.pegaPontuacoesNaRodada(rodada[0], connection)
+        if(isinstance(pontuacoesRodada, int) == True):
+            resposta = messagebox.showerror('ERRO', 'erro pontuacoesRodada'+str(pontuacoesRodada))
+            if(resposta == 'ok'):
+                janela.destroy()
         desenhaTabelaPontuacoes(2, 14, pontuacoesRodada, False, jogadorDaVez)
         arremessoCount = 0
 
@@ -141,6 +155,11 @@ def pegaPontuacao(nome, pontuacoesPossiveis):
 
 def defineStatusBotaoPontuacao(posicaoCartela, primeira, jogadorId):
     taLivre = Cartela.verificaSePontuacaoEstaDisponivel(jogadorId,posicaoCartela)
+    if(taLivre == -2):
+        resposta = messagebox.showerror('ERROR', 'erro verificaSePontuacaoEstaDisponivel')
+        if(resposta == 'ok'):
+            janela.destroy()
+
 
     if (primeira or taLivre == False):
         return DISABLED
@@ -149,7 +168,11 @@ def defineStatusBotaoPontuacao(posicaoCartela, primeira, jogadorId):
 def handleFimDeJogo():
     jogadoresIds = []
     for jogador in jogadores:
-        Cartela.somaPontuacao(jogador[0], connection)
+        statusSomaPontuacao =Cartela.somaPontuacao(jogador[0], connection)
+        if(statusSomaPontuacao == -1):
+            resposta = messagebox.showerror('ERROR', 'erro somaPontuacao')
+            if(resposta == 'ok'):
+                janela.destroy()
         jogadoresIds.append(jogador[0])
     statusPartidaFinaliza = Partida.finaliza(partidaId, connection)
     if(statusPartidaFinaliza == 1):
@@ -183,6 +206,12 @@ def handlePreencheCartela(joagdorId, pontuacaoNome, pontos, novaRodada):
         jogadorDaVezLabel.grid(row=14,column=0)
         botaoJogarDados = Button(janela,width=19, text="Jogar Dados", command=lambda: jogaDados(dados), state=NORMAL)
         botaoJogarDados.grid(row=15, column=0, columnspan=5, sticky=W)
+    else:
+        resposta = messagebox.showerror('ERROR', 'erro preenche'+str(preenche))
+        if(resposta == 'ok'):
+            janela.destroy()
+
+
         
 
 

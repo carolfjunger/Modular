@@ -84,8 +84,9 @@ def preenche(jogadorId,posicaoCartela, pontos):
 '''
 
 def verificaSePontuacaoEstaDisponivel(jogadorId,posicaoCartela):
-    dicJogo = recuperacao.load()
+   
     try:
+        dicJogo = recuperacao.load()
         if(dicJogo[jogadorId][posicaoCartela] == ' '):
             return True
         else:
