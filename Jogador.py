@@ -16,7 +16,7 @@
 '''
 import mysql.connector
 from mysql.connector import Error
-from Principal import conecatarNoBD
+
 __all__ = ["cria",  "vinculaPontuacaoFinalAoJogador"]
 
 

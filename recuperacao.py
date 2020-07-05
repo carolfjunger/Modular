@@ -69,55 +69,57 @@ def inicializa(lJogadores):
         file_object.write(formata_saida(jogadores))
         
 def save(dicJogo):
-    jogadores = Element('jogadores')
+    try:
+        jogadores = Element('jogadores')
+        
+        for jog in dicJogo:
+            jogador = SubElement(jogadores, 'jogador')
+            jogador.text = str(jog) 
+
+            jogadaDeUm = SubElement(jogador,'jogadaDeUm')
+            jogadaDeUm.text = dicJogo[jog]['jogadaDeUm']
     
-    for jog in dicJogo:
-        jogador = SubElement(jogadores, 'jogador')
-        jogador.text = str(jog) 
-        
-        jogadaDeUm = SubElement(jogador,'jogadaDeUm')
-        jogadaDeUm.text = dicJogo[jog]['jogadaDeUm']
-        
-        jogadaDeDois = SubElement(jogador, 'jogadaDeDois')
-        jogadaDeDois.text = dicJogo[jog]['jogadaDeDois']
-        
-        jogadaDeTres = SubElement(jogador, 'jogadaDeTres')
-        jogadaDeTres.text = dicJogo[jog]['jogadaDeTres']
-        
-        jogadaDeQuatro = SubElement(jogador, 'jogadaDeQuatro')
-        jogadaDeQuatro.text = dicJogo[jog]['jogadaDeQuatro']
-        
-        jogadaDeCinco = SubElement(jogador, 'jogadaDeCinco')
-        jogadaDeCinco.text = dicJogo[jog]['jogadaDeCinco']
-        
-        jogadaDeSeis = SubElement(jogador, 'jogadaDeSeis')
-        jogadaDeSeis.text = dicJogo[jog]['jogadaDeSeis']
-        
-        trinca = SubElement(jogador, 'trinca')
-        trinca.text = dicJogo[jog]['trinca']
-        
-        quadra = SubElement(jogador, 'quadra')
-        quadra.text = dicJogo[jog]['quadra']
-        
-        fullHouse = SubElement(jogador, 'fullHouse')
-        fullHouse.text = dicJogo[jog]['fullHouse']
-        
-        sequenciaBaixa = SubElement(jogador, 'sequenciaBaixa')
-        sequenciaBaixa.text = dicJogo[jog]['sequenciaBaixa']
-        
-        sequenciaAlta = SubElement(jogador,'sequenciaAlta')
-        sequenciaAlta.text = dicJogo[jog]['sequenciaAlta']
-        
-        general = SubElement(jogador, 'general')
-        general.text = dicJogo[jog]['general']
-        
-        jogadaAleatoria = SubElement(jogador,'jogadaAleatoria')
-        jogadaAleatoria.text = dicJogo[jog]['jogadaAleatoria']
+            jogadaDeDois = SubElement(jogador, 'jogadaDeDois')
+            jogadaDeDois.text = dicJogo[jog]['jogadaDeDois']
+            
+            jogadaDeTres = SubElement(jogador, 'jogadaDeTres')
+            jogadaDeTres.text = dicJogo[jog]['jogadaDeTres']
+            
+            jogadaDeQuatro = SubElement(jogador, 'jogadaDeQuatro')
+            jogadaDeQuatro.text = dicJogo[jog]['jogadaDeQuatro']
+            
+            jogadaDeCinco = SubElement(jogador, 'jogadaDeCinco')
+            jogadaDeCinco.text = dicJogo[jog]['jogadaDeCinco']
+            
+            jogadaDeSeis = SubElement(jogador, 'jogadaDeSeis')
+            jogadaDeSeis.text = dicJogo[jog]['jogadaDeSeis']
+            
+            trinca = SubElement(jogador, 'trinca')
+            trinca.text = dicJogo[jog]['trinca']
+            
+            quadra = SubElement(jogador, 'quadra')
+            quadra.text = dicJogo[jog]['quadra']
+            
+            fullHouse = SubElement(jogador, 'fullHouse')
+            fullHouse.text = dicJogo[jog]['fullHouse']
+            
+            sequenciaBaixa = SubElement(jogador, 'sequenciaBaixa')
+            sequenciaBaixa.text = dicJogo[jog]['sequenciaBaixa']
+            
+            sequenciaAlta = SubElement(jogador,'sequenciaAlta')
+            sequenciaAlta.text = dicJogo[jog]['sequenciaAlta']
+            
+            general = SubElement(jogador, 'general')
+            general.text = dicJogo[jog]['general']
+            
+            jogadaAleatoria = SubElement(jogador,'jogadaAleatoria')
+            jogadaAleatoria.text = dicJogo[jog]['jogadaAleatoria']
 
 
-    nome_arquivo = 'recuperacao.xml'
-    with open (nome_arquivo, 'w') as file_object:
-        file_object.write(formata_saida(jogadores))
+        nome_arquivo = 'recuperacao.xml'
+        with open (nome_arquivo, 'w') as file_object:
+            file_object.write(formata_saida(jogadores))
+    except Exception as e: print("AQUI",e)
  
     
 def load():

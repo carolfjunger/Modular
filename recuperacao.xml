@@ -2,28 +2,28 @@
 <jogadores>
   <jogador>
     2
-    <jogadaDeUm>1</jogadaDeUm>
+    <jogadaDeUm> </jogadaDeUm>
     <jogadaDeDois> </jogadaDeDois>
     <jogadaDeTres> </jogadaDeTres>
     <jogadaDeQuatro> </jogadaDeQuatro>
-    <jogadaDeCinco> </jogadaDeCinco>
+    <jogadaDeCinco>10</jogadaDeCinco>
     <jogadaDeSeis> </jogadaDeSeis>
-    <trinca> </trinca>
+    <trinca>13</trinca>
     <quadra> </quadra>
     <fullHouse> </fullHouse>
     <sequenciaBaixa> </sequenciaBaixa>
-    <sequenciaAlta> </sequenciaAlta>
+    <sequenciaAlta>30</sequenciaAlta>
     <general> </general>
     <jogadaAleatoria> </jogadaAleatoria>
   </jogador>
   <jogador>
     3
-    <jogadaDeUm> </jogadaDeUm>
+    <jogadaDeUm>2</jogadaDeUm>
     <jogadaDeDois> </jogadaDeDois>
     <jogadaDeTres> </jogadaDeTres>
-    <jogadaDeQuatro> </jogadaDeQuatro>
+    <jogadaDeQuatro>8</jogadaDeQuatro>
     <jogadaDeCinco> </jogadaDeCinco>
-    <jogadaDeSeis> </jogadaDeSeis>
+    <jogadaDeSeis>18</jogadaDeSeis>
     <trinca> </trinca>
     <quadra> </quadra>
     <fullHouse> </fullHouse>

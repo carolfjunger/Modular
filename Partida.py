@@ -13,7 +13,7 @@
 
 __all__ = ["cria", "finaliza"]
 
-from Principal import conecatarNoBD
+# from Principal import conecatarNoBD
 from mysql.connector import Error
 import Jogador
 

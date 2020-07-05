@@ -3,8 +3,10 @@ from mysql.connector import Error
 from tkinter import *
 from tkinter.ttk import *
 from PIL import ImageTk, Image
+from ConectarBD import conecatarNoBD
 import Arremesso
 import Rodada
+import Cartela 
 import recuperacao
 
 __all__ = ["conecatarNoBD", "selecionaDados"]
@@ -12,9 +14,9 @@ __all__ = ["conecatarNoBD", "selecionaDados"]
 jogadores = [(2,"maria"), (3, "clara")]
 pontuacoesNomes = ['jogadaDeUm', 'jogadaDeDois', 'jogadaDeTres', 'jogadaDeQuatro', 'jogadaDeCinco', 'jogadaDeSeis', 'trinca', 'quadra', 'fullHouse', 'sequenciaAlta', 'sequenciaBaixa', 'general', 'jogadaAleatoria']
 dados = [{ "valor": 1, "selecionado": 0}, { "valor": 2, "selecionado": 0}, { "valor": 3, "selecionado": 0}, { "valor": 4, "selecionado": 0}, { "valor": 5, "selecionado": 0}]
-partidaId = 1
+partidaId = 4
 arremessoCount = 0
-rodadaCount = 1
+rodadaCount = 4
 
 
 pontuacoes = recuperacao.load()
@@ -29,14 +31,14 @@ botaoJogarDadosState = NORMAL
 
 
 
-def conecatarNoBD():
-    connection = mysql.connector.connect(host='localhost',
-                                            user='root',
-                                            password='M0dul4rinf1301',
-                                            database='yathzee')
-    if connection.is_connected():
-        return connection
-    return -1
+# def conecatarNoBD():
+#     connection = mysql.connector.connect(host='localhost',
+#                                             user='root',
+#                                             password='M0dul4rinf1301',
+#                                             database='yathzee')
+#     if connection.is_connected():
+#         return connection
+#     return -1
 
 connection = conecatarNoBD()
 
@@ -79,13 +81,13 @@ def jogaDados(dados):
     lAuxDiceList = handleDados(dados, diceList)
     diceList = lAuxDiceList
     arremessoCount += 1
-    print('arremessoCount', arremessoCount)
+    print('rodadaCount', rodadaCount)
     if (arremessoCount == 3 ):
         botaoJogarDados.grid_forget()
         botaoJogarDados = Button(janela,width=19, text="Jogar Dados", command=lambda: jogaDados(dados), state=DISABLED)
         botaoJogarDados.grid(row=15, column=0, columnspan=5, sticky=W)
         pontuacoesRodada = Rodada.pegaPontuacoesNaRodada(rodada[0], connection)
-        desenhaTabelaPontuacoes(2, 14, pontuacoesRodada)
+        desenhaTabelaPontuacoes(2, 14, pontuacoesRodada, False, jogadorDaVez)
         arremessoCount = 0
 
    
@@ -130,7 +132,7 @@ def desenhaTabela(width, height):
                 else:
                     pontuacaoJog = pontuacoes[jogadores[j - 1][0]][pontuacoesNomes[i - 1]]
                     b = Label(janela, text=pontuacaoJog, width=20)
-            b.grid(row=i, column=j)
+            b.grid(row=i, column=j, sticky=N+S)
 
 def pegaPontuacao(nome, pontuacoesPossiveis):
     if( pontuacoesPossiveis != {}):
@@ -139,34 +141,118 @@ def pegaPontuacao(nome, pontuacoesPossiveis):
                 return tupla[1]
     return 0
 
-def desenhaTabelaPontuacoes(width, height, pontuacoesPossiveis):
+def defineStatusBotaoPontuacao(posicaoCartela, primeira, jogadorId):
+    taLivre = Cartela.verificaSePontuacaoEstaDisponivel(jogadorId,posicaoCartela)
+
+    if (primeira or taLivre == False):
+        return DISABLED
+    return NORMAL
+
+def handleFimDeJogo():
+    pass
+
+def handlePreencheCartela(joagdorId, pontuacaoNome, pontos, novaRodada):
+    global pontuacoes
+    global arremessoCount
+    global jogadorDaVez
+    global rodadaCount
+    global botaoJogarDados
+    print('pontuacaoNome **', pontuacaoNome)
+    preenche = Cartela.preenche(joagdorId, pontuacaoNome, pontos)
+    print('preenche', preenche)
+    if(preenche == 1):
+        desenhaTabelaPontuacoes(width, height, {}, True, jogadorDaVez)
+        pontuacoes = recuperacao.load()
+        desenhaTabela(3, 14)
+        arremessoCount = 0
+        jogadorDaVez = Rodada.defineJogadorDaVez(partidaId, jogadores, connection)
+        print('jogadorDaVez',jogadorDaVez)
+        jogadorDaVezLabel = Label(janela, text="Está na vez do(a):"+jogadorDaVez[1], width=20)
+        jogadorDaVezLabel.grid(row=14,column=0)
+        if(joagdorId == jogadores[1][0]):
+            rodadaCount += 1
+            if(rodadaCount > 13):
+                handleFimDeJogo()
+        botaoJogarDados = Button(janela,width=19, text="Jogar Dados", command=lambda: jogaDados(dados), state=NORMAL)
+        botaoJogarDados.grid(row=15, column=0, columnspan=5, sticky=W)
+        
+
+
+def desenhaTabelaPontuacoes(width, height, pontuacoesPossiveis, primeira, jogadorDaVez):
+
     for i in range(height): #Rows
-        print('i -1', i - 1)
-        print('pontuacoes', pontuacoes)
         for j in range(9, width + 9): #Columns
             if (i==0):
                 if (j==9):
                     b = Label(janela, text="Pontuações Possíveis", width=20)
+                    b.grid(row=i, column=j, sticky=N+S+E+W )
                 else:
                     b = Label(janela, text=jogadores[j - 10][1], width=20)
+                    b.grid(row=i, column=10, sticky=N+S+E+W )
             else:
                 if (j==9):
                     b = Label(janela, text=pontuacoesNomes[i - 1], width=20)
-                else:
-                    pontuacaoPossivel = pegaPontuacao(pontuacoesNomes[i - 1], pontuacoesPossiveis)
-                    b = Label(janela, text=pontuacaoPossivel, width=20)
-            b.grid(row=i, column=j)
+                    b.grid(row=i, column=j, sticky=N+S )
+                # else:
+                    # statusBotaoPontuacao = defineStatusBotaoPontuacao(pontuacoesNomes[i - 1], primeira, jogadores[j - 10][0])
+                    # pontuacaoPossivel = pegaPontuacao(pontuacoesNomes[i - 1], pontuacoesPossiveis)
+                    # # print('pontuacoesNomes -----', pontuacoesNomes[i - 1] )
+                    # # b = Button(janela, text=pontuacaoPossivel, width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadores[j - 10][0], pontuacoesNomes[i - 1], pontuacaoPossivel, j - 10) )
+                    # botoesPontuacoes[pontuacoesNomes[i - 1]] = Button(janela, text=pontuacaoPossivel, width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadores[j - 10][0], pontuacoesNomes[i - 1], pontuacaoPossivel, j - 10) )
+                    # botoesPontuacoes[pontuacoesNomes[i - 1]].grid(row=i, column=j, sticky=N+S )
+                    # # print("botoesPontuacoes", botoesPontuacoes)
+            
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaDeUm', primeira,jogadorDaVez[0])
+    # pontuacaoPossivel = pegaPontuacao('jogadaDeUm', pontuacoesPossiveis)
+    btJogadaDeUm = Button(janela, text= pegaPontuacao('jogadaDeUm', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaDeUm', pegaPontuacao('jogadaDeUm', pontuacoesPossiveis), jogadorDaVez) )
+    btJogadaDeUm.grid(row=1, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaDeDois', primeira,jogadorDaVez[0])
+    # pontuacaoPossivel = pegaPontuacao('jogadaDeDois', pontuacoesPossiveis)
+    btJogadaDeDois = Button(janela, text=pegaPontuacao('jogadaDeDois', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaDeDois', pegaPontuacao('jogadaDeDois', pontuacoesPossiveis), jogadorDaVez) )
+    btJogadaDeDois.grid(row=2, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaDeTres', primeira,jogadorDaVez[0])
+    btJogadaDeTres = Button(janela, text=pegaPontuacao('jogadaDeTres', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaDeTres', pegaPontuacao('jogadaDeTres', pontuacoesPossiveis), jogadorDaVez) )
+    btJogadaDeTres.grid(row=3, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaDeQuatro', primeira,jogadorDaVez[0])
+    btjogadaDeQuatro = Button(janela, text=pegaPontuacao('jogadaDeQuatro', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaDeQuatro', pegaPontuacao('jogadaDeQuatro', pontuacoesPossiveis), jogadorDaVez) )
+    btjogadaDeQuatro.grid(row=4, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaDeCinco', primeira,jogadorDaVez[0])
+    btjogadaDeCinco = Button(janela, text=pegaPontuacao('jogadaDeCinco', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaDeCinco', pegaPontuacao('jogadaDeCinco', pontuacoesPossiveis), jogadorDaVez) )
+    btjogadaDeCinco.grid(row=5, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaDeSeis', primeira,jogadorDaVez[0])
+    btjogadaDeSeis = Button(janela, text=pegaPontuacao('jogadaDeSeis', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaDeSeis', pegaPontuacao('jogadaDeSeis', pontuacoesPossiveis), jogadorDaVez) )
+    btjogadaDeSeis.grid(row=6, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('trinca', primeira,jogadorDaVez[0])
+    bttrinca = Button(janela, text=pegaPontuacao('trinca', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'trinca', pegaPontuacao('trinca', pontuacoesPossiveis), jogadorDaVez) )
+    bttrinca.grid(row=7, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('quadra', primeira,jogadorDaVez[0])
+    btquadra = Button(janela, text=pegaPontuacao('quadra', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'quadra', pegaPontuacao('quadra', pontuacoesPossiveis), jogadorDaVez) )
+    btquadra.grid(row=8, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('fullHouse', primeira,jogadorDaVez[0])
+    btfullHouse = Button(janela, text=pegaPontuacao('fullHouse', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'fullHouse', pegaPontuacao('fullHouse', pontuacoesPossiveis), jogadorDaVez) )
+    btfullHouse.grid(row=9, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('sequenciaAlta', primeira,jogadorDaVez[0])
+    btsequenciaAlta = Button(janela, text=pegaPontuacao('sequenciaAlta', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'sequenciaAlta', pegaPontuacao('sequenciaAlta', pontuacoesPossiveis), jogadorDaVez) )
+    btsequenciaAlta.grid(row=10, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('sequenciaBaixa', primeira,jogadorDaVez[0])
+    btsequenciaBaixa = Button(janela, text=pegaPontuacao('sequenciaBaixa', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'sequenciaBaixa', pegaPontuacao('sequenciaBaixa', pontuacoesPossiveis), jogadorDaVez) )
+    btsequenciaBaixa.grid(row=11, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('general', primeira,jogadorDaVez[0])
+    btgeneral = Button(janela, text=pegaPontuacao('general', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'general', pegaPontuacao('general', pontuacoesPossiveis), jogadorDaVez) )
+    btgeneral.grid(row=12, column=10, sticky=N+S+E+W)
+    statusBotaoPontuacao = defineStatusBotaoPontuacao('jogadaAleatoria', primeira,jogadorDaVez[0])
+    btjogadaAleatoria = Button(janela, text=pegaPontuacao('jogadaAleatoria', pontuacoesPossiveis), width=20, state=statusBotaoPontuacao, command=lambda: handlePreencheCartela(jogadorDaVez[0], 'jogadaAleatoria', pegaPontuacao('jogadaAleatoria', pontuacoesPossiveis), jogadorDaVez) )
+    btjogadaAleatoria.grid(row=13, column=10, sticky=N+S+E+W)
+
+
 
 
 janela = Tk()
 janela.title('Yathzee')
 janela["bg"] = 'green'
-janela.geometry('1000x300')
+janela.geometry('1000x500')
 
-height = 14
-width = 3
-desenhaTabela(width, height)
-desenhaTabelaPontuacoes(2, height, {})
+
 # for i in range(height): #Rows
 #     for j in range(width): #Columns
 #         if (i==0):
@@ -203,6 +289,11 @@ botaoJogarDados = Button(janela,width=19, text="Jogar Dados", command=lambda: jo
 botaoJogarDados.grid(row=15, column=0, columnspan=5, sticky=W)
 dadosSelecionadosTexto =  Label(janela, text="Dados Selecionados")
 dadosSelecionadosTexto.grid(row=14,column=2)
+height = 14
+width = 3
+desenhaTabela(width, height)
+desenhaTabelaPontuacoes(2, height, {}, True, jogadorDaVez)
+
 
 janela.mainloop()
     

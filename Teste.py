@@ -38,7 +38,7 @@ import Dado
 import Arremesso
 import Dado
 import RegrasDePontuacao
-from Principal import conecatarNoBD
+from ConectarBD import conecatarNoBD
 import recuperacao
 
 class JogadorTeste(unittest.TestCase):
@@ -315,6 +315,7 @@ class CartelaTeste(unittest.TestCase):
             Jogador.cria('José', connection)
             Partida.cria([2,3], connection)
         retorno_esperado = Cartela.cria(1,connection)
+ 
         self.assertEqual(retorno_esperado, 1)
 
     def teste_01_funcao_preenche_modulo_cartela(self):
