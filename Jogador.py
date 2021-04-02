@@ -16,6 +16,7 @@
 '''
 import mysql.connector
 from mysql.connector import Error
+
 __all__ = ["cria",  "vinculaPontuacaoFinalAoJogador"]
 
 
@@ -134,9 +135,12 @@ def pegaTodos(partida_id, connection):
     if (cursor):
         cursor.execute(query,(partida_id,))
         result = cursor.fetchall()
+        print('result', result)
         if (result is not None):
             return result
         return -1
+
+
     
     
     

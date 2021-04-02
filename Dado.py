@@ -11,7 +11,7 @@
 '''
 
 import random
-    
+
 __all__ = ["jogaDado"]
 
 '''
@@ -25,3 +25,5 @@ __all__ = ["jogaDado"]
 
 def jogaDado():
     return random.randint(1,6)
+
+

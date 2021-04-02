@@ -25,43 +25,43 @@ def inicializa(lJogadores):
         jogador.text = str(jog)
         
         jogadaDeUm = SubElement(jogador,'jogadaDeUm')
-        jogadaDeUm.text = "-1"
+        jogadaDeUm.text = " "
         
         jogadaDeDois = SubElement(jogador, 'jogadaDeDois')
-        jogadaDeDois.text = "-1"
+        jogadaDeDois.text = " "
         
         jogadaDeTres = SubElement(jogador, 'jogadaDeTres')
-        jogadaDeTres.text = "-1"
+        jogadaDeTres.text = " "
         
         jogadaDeQuatro = SubElement(jogador, 'jogadaDeQuatro')
-        jogadaDeQuatro.text = "-1"
+        jogadaDeQuatro.text = " "
         
         jogadaDeCinco = SubElement(jogador, 'jogadaDeCinco')
-        jogadaDeCinco.text = "-1"
+        jogadaDeCinco.text = " "
         
         jogadaDeSeis = SubElement(jogador, 'jogadaDeSeis')
-        jogadaDeSeis.text = "-1"
+        jogadaDeSeis.text = " "
         
         trinca = SubElement(jogador, 'trinca')
-        trinca.text = "-1"
+        trinca.text = " "
         
         quadra = SubElement(jogador, 'quadra')
-        quadra.text = "-1"
+        quadra.text = " "
         
         fullHouse = SubElement(jogador, 'fullHouse')
-        fullHouse.text = "-1"
+        fullHouse.text = " "
         
         sequenciaBaixa = SubElement(jogador, 'sequenciaBaixa')
-        sequenciaBaixa.text = "-1"
+        sequenciaBaixa.text = " "
         
         sequenciaAlta = SubElement(jogador,'sequenciaAlta')
-        sequenciaAlta.text = "-1"
+        sequenciaAlta.text = " "
         
         general = SubElement(jogador, 'general')
-        general.text = "-1"
+        general.text = " "
         
         jogadaAleatoria = SubElement(jogador,'jogadaAleatoria')
-        jogadaAleatoria.text = "-1"
+        jogadaAleatoria.text = " "
 
 
     nome_arquivo = 'recuperacao.xml'
@@ -69,79 +69,84 @@ def inicializa(lJogadores):
         file_object.write(formata_saida(jogadores))
         
 def save(dicJogo):
-    jogadores = Element('jogadores')
+    try:
+        jogadores = Element('jogadores')
+        
+        for jog in dicJogo:
+            jogador = SubElement(jogadores, 'jogador')
+            jogador.text = str(jog) 
+
+            jogadaDeUm = SubElement(jogador,'jogadaDeUm')
+            jogadaDeUm.text = dicJogo[jog]['jogadaDeUm']
     
-    for jog in dicJogo:
-        jogador = SubElement(jogadores, 'jogador')
-        jogador.text = str(jog) 
-        
-        jogadaDeUm = SubElement(jogador,'jogadaDeUm')
-        jogadaDeUm.text = dicJogo[jog]['jogadaDeUm']
-        
-        jogadaDeDois = SubElement(jogador, 'jogadaDeDois')
-        jogadaDeDois.text = dicJogo[jog]['jogadaDeDois']
-        
-        jogadaDeTres = SubElement(jogador, 'jogadaDeTres')
-        jogadaDeTres.text = dicJogo[jog]['jogadaDeTres']
-        
-        jogadaDeQuatro = SubElement(jogador, 'jogadaDeQuatro')
-        jogadaDeQuatro.text = dicJogo[jog]['jogadaDeQuatro']
-        
-        jogadaDeCinco = SubElement(jogador, 'jogadaDeCinco')
-        jogadaDeCinco.text = dicJogo[jog]['jogadaDeCinco']
-        
-        jogadaDeSeis = SubElement(jogador, 'jogadaDeSeis')
-        jogadaDeSeis.text = dicJogo[jog]['jogadaDeSeis']
-        
-        trinca = SubElement(jogador, 'trinca')
-        trinca.text = dicJogo[jog]['trinca']
-        
-        quadra = SubElement(jogador, 'quadra')
-        quadra.text = dicJogo[jog]['quadra']
-        
-        fullHouse = SubElement(jogador, 'fullHouse')
-        fullHouse.text = dicJogo[jog]['fullHouse']
-        
-        sequenciaBaixa = SubElement(jogador, 'sequenciaBaixa')
-        sequenciaBaixa.text = dicJogo[jog]['sequenciaBaixa']
-        
-        sequenciaAlta = SubElement(jogador,'sequenciaAlta')
-        sequenciaAlta.text = dicJogo[jog]['sequenciaAlta']
-        
-        general = SubElement(jogador, 'general')
-        general.text = dicJogo[jog]['general']
-        
-        jogadaAleatoria = SubElement(jogador,'jogadaAleatoria')
-        jogadaAleatoria.text = dicJogo[jog]['jogadaAleatoria']
+            jogadaDeDois = SubElement(jogador, 'jogadaDeDois')
+            jogadaDeDois.text = dicJogo[jog]['jogadaDeDois']
+            
+            jogadaDeTres = SubElement(jogador, 'jogadaDeTres')
+            jogadaDeTres.text = dicJogo[jog]['jogadaDeTres']
+            
+            jogadaDeQuatro = SubElement(jogador, 'jogadaDeQuatro')
+            jogadaDeQuatro.text = dicJogo[jog]['jogadaDeQuatro']
+            
+            jogadaDeCinco = SubElement(jogador, 'jogadaDeCinco')
+            jogadaDeCinco.text = dicJogo[jog]['jogadaDeCinco']
+            
+            jogadaDeSeis = SubElement(jogador, 'jogadaDeSeis')
+            jogadaDeSeis.text = dicJogo[jog]['jogadaDeSeis']
+            
+            trinca = SubElement(jogador, 'trinca')
+            trinca.text = dicJogo[jog]['trinca']
+            
+            quadra = SubElement(jogador, 'quadra')
+            quadra.text = dicJogo[jog]['quadra']
+            
+            fullHouse = SubElement(jogador, 'fullHouse')
+            fullHouse.text = dicJogo[jog]['fullHouse']
+            
+            sequenciaBaixa = SubElement(jogador, 'sequenciaBaixa')
+            sequenciaBaixa.text = dicJogo[jog]['sequenciaBaixa']
+            
+            sequenciaAlta = SubElement(jogador,'sequenciaAlta')
+            sequenciaAlta.text = dicJogo[jog]['sequenciaAlta']
+            
+            general = SubElement(jogador, 'general')
+            general.text = dicJogo[jog]['general']
+            
+            jogadaAleatoria = SubElement(jogador,'jogadaAleatoria')
+            jogadaAleatoria.text = dicJogo[jog]['jogadaAleatoria']
 
 
-    nome_arquivo = 'recuperacao.xml'
-    with open (nome_arquivo, 'w') as file_object:
-        file_object.write(formata_saida(jogadores))
+        nome_arquivo = 'recuperacao.xml'
+        with open (nome_arquivo, 'w') as file_object:
+            file_object.write(formata_saida(jogadores))
+    except Exception as e: print("AQUI",e)
  
     
 def load():
-    with open('recuperacao.xml', 'rt') as f:
-        tree = ElementTree.parse(f)
-        root = tree.getroot()
+    try:
+        with open('recuperacao.xml', 'rt') as f:
+            tree = ElementTree.parse(f)
+            root = tree.getroot()
+            
+        dict_jogadores = {}
         
-    dict_jogadores = {}
-    
-    for jogador in root.findall('jogador'):
-        dict_auxiliar = {}
-        dict_auxiliar['jogadaDeUm'] = (jogador.find('jogadaDeUm').text)
-        dict_auxiliar['jogadaDeDois'] = (jogador.find('jogadaDeDois').text)
-        dict_auxiliar['jogadaDeTres'] = (jogador.find('jogadaDeTres').text)
-        dict_auxiliar['jogadaDeQuatro'] = (jogador.find('jogadaDeQuatro').text)
-        dict_auxiliar['jogadaDeCinco'] = (jogador.find('jogadaDeCinco').text)
-        dict_auxiliar['jogadaDeSeis'] = (jogador.find('jogadaDeSeis').text)
-        dict_auxiliar['trinca'] = (jogador.find('trinca').text)
-        dict_auxiliar['quadra'] = (jogador.find('quadra').text)
-        dict_auxiliar['fullHouse'] = (jogador.find('fullHouse').text)
-        dict_auxiliar['sequenciaBaixa'] = (jogador.find('sequenciaBaixa').text)
-        dict_auxiliar['sequenciaAlta'] = (jogador.find('sequenciaAlta').text)
-        dict_auxiliar['general'] = (jogador.find('general').text)
-        dict_auxiliar['jogadaAleatoria'] = (jogador.find('jogadaAleatoria').text)
-        dict_jogadores[int(jogador.text)] = dict_auxiliar
-        
-    return dict_jogadores
+        for jogador in root.findall('jogador'):
+            dict_auxiliar = {}
+            dict_auxiliar['jogadaDeUm'] = (jogador.find('jogadaDeUm').text)
+            dict_auxiliar['jogadaDeDois'] = (jogador.find('jogadaDeDois').text)
+            dict_auxiliar['jogadaDeTres'] = (jogador.find('jogadaDeTres').text)
+            dict_auxiliar['jogadaDeQuatro'] = (jogador.find('jogadaDeQuatro').text)
+            dict_auxiliar['jogadaDeCinco'] = (jogador.find('jogadaDeCinco').text)
+            dict_auxiliar['jogadaDeSeis'] = (jogador.find('jogadaDeSeis').text)
+            dict_auxiliar['trinca'] = (jogador.find('trinca').text)
+            dict_auxiliar['quadra'] = (jogador.find('quadra').text)
+            dict_auxiliar['fullHouse'] = (jogador.find('fullHouse').text)
+            dict_auxiliar['sequenciaBaixa'] = (jogador.find('sequenciaBaixa').text)
+            dict_auxiliar['sequenciaAlta'] = (jogador.find('sequenciaAlta').text)
+            dict_auxiliar['general'] = (jogador.find('general').text)
+            dict_auxiliar['jogadaAleatoria'] = (jogador.find('jogadaAleatoria').text)
+            dict_jogadores[int(jogador.text)] = dict_auxiliar
+            
+        return dict_jogadores
+    except:
+        return -1

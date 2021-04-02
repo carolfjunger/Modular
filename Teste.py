@@ -38,7 +38,7 @@ import Dado
 import Arremesso
 import Dado
 import RegrasDePontuacao
-from Principal import conecatarNoBD
+from ConectarBD import conecatarNoBD
 import recuperacao
 
 class JogadorTeste(unittest.TestCase):
@@ -113,7 +113,7 @@ class PartidaTeste(unittest.TestCase):
         print("Caso de Teste 02 Funcao Finaliza Partida - Funcao retorna 1 caso tenha finalizado a partida")
         connection = conecatarNoBD()
         Partida.cria([2,3], connection)
-        retorno_esperado = Partida.finaliza(connection)
+        retorno_esperado = Partida.finaliza(1,connection)
         self.assertEqual(retorno_esperado, 1)
     
     def teste_01_funcao_cria_modulo_partida(self):
@@ -141,11 +141,11 @@ class PartidaTeste(unittest.TestCase):
     def teste_04_funcao_cria_modulo_partida(self):
         print("Caso de Teste 04 Funcao Cria Partida - Funcao retorna 1 caso Partida seja criada com os jogadores")
         connection = conecatarNoBD()
-        Partida.finaliza(connection)
+        Partida.finaliza(1,connection)
         Jogador.cria("João", connection)
         Jogador.cria("Pedro", connection)   
         retorno_esperado = Partida.cria([1,2], connection)
-        Partida.finaliza(connection)
+        Partida.finaliza(1,connection)
         self.assertEqual(retorno_esperado, 1)
 
 
@@ -315,6 +315,7 @@ class CartelaTeste(unittest.TestCase):
             Jogador.cria('José', connection)
             Partida.cria([2,3], connection)
         retorno_esperado = Cartela.cria(1,connection)
+ 
         self.assertEqual(retorno_esperado, 1)
 
     def teste_01_funcao_preenche_modulo_cartela(self):
@@ -371,26 +372,26 @@ class CartelaTeste(unittest.TestCase):
 
 class ArremessoTeste (unittest.TestCase):
     
-    def teste01(self):
-        print("Caso de Teste 01 Funcao arremessa - Funcao retorna -2 caso já tenham sido escolhido todos os cinco dados que o jogador quer manter")
+    # def teste01(self):
+    #     print("Caso de Teste 01 Funcao arremessa - Funcao retorna -2 caso já tenham sido escolhido todos os cinco dados que o jogador quer manter")
          
-        retorno_esperado = Arremesso.arremessa([1,2,3,4,5])
+    #     retorno_esperado = Arremesso.arremessa( [{ "valor": 1, "selecionado": 0}, { "valor": 2, "selecionado": 0}, { "valor": 3, "selecionado": 0}, { "valor": 4, "selecionado": 0}, { "valor": 5, "selecionado": 0}])
         
-        self.assertEqual(retorno_esperado, -2)
+    #     self.assertEqual(retorno_esperado, -2)
         
     def teste03(self):
         print("Caso de Teste 03 Funcao arremessa - Funcao retorna uma lista com 5 inteiros, testa se a lista tem 5 itens")
          
-        retorno_esperado = Arremesso.arremessa([])
+        retorno_esperado = Arremesso.arremessa([{ "valor": 1, "selecionado": 0}, { "valor": 2, "selecionado": 0}, { "valor": 3, "selecionado": 0}, { "valor": 4, "selecionado": 0}, { "valor": 5, "selecionado": 0}])
 
         self.assertEqual(len(retorno_esperado), 5)
 
     def teste04(self):
         print("Caso de Teste 04 Funcao arremessa - Funcao retorna uma lista com 5 inteiros, testa se todos itens da lista sao inteiros")
          
-        retorno_esperado = Arremesso.arremessa([])
+        retorno_esperado = Arremesso.arremessa([{ "valor": 1, "selecionado": 0}, { "valor": 2, "selecionado": 0}, { "valor": 3, "selecionado": 0}, { "valor": 4, "selecionado": 0}, { "valor": 5, "selecionado": 0}])
         
-        self.assertEqual(all(isinstance(n, int) for n in retorno_esperado), True)
+        self.assertEqual(all(isinstance(n["valor"], int) for n in retorno_esperado), True)
         
    
 

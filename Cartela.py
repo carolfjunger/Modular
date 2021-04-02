@@ -15,7 +15,7 @@
 import Jogador
 import recuperacao
 
-__all__ = ["cria", "preenche", "somaPontuacao"]
+__all__ = ["cria", "preenche", "somaPontuacao", "verificaSePontuacaoEstaDisponivel"]
 
 '''
     Definição:
@@ -57,18 +57,45 @@ def preenche(jogadorId,posicaoCartela, pontos):
 
     dicJogo = recuperacao.load()
     try:
-        dicJogo[jogadorId][posicaoCartela] = pontos
-        
+        dicJogo[jogadorId][posicaoCartela] = str(pontos)
         recuperacao.save(dicJogo)
         
         teste = recuperacao.load()
         
-        if(teste[jogadorId][posicaoCartela] == '-1'):
+        if(teste[jogadorId][posicaoCartela] == ' '):
             return -1
     except:
         return -2
     
     return 1
+
+
+
+'''
+    Definição:
+        Função responsável por preencher uma cartela em uma partida de Yahtzee.
+    Parâmetros:
+        jogadorId: Id do jogador
+        posicaoCartela: nome da posicao a ser preenchida na cartela
+        ponto: valor dos pontos a serem preenchidos
+    Retorno: 
+        1: caso a cartela tenha sido preenchida com sucesso
+        -1: caso arquivo xml não tenha sido preenchido corretamente
+'''
+
+def verificaSePontuacaoEstaDisponivel(jogadorId,posicaoCartela):
+   
+    try:
+        dicJogo = recuperacao.load()
+        if(dicJogo[jogadorId][posicaoCartela] == ' '):
+            return True
+        else:
+            return False
+        
+    except:
+        return -2
+    
+
 
 
 '''
@@ -92,7 +119,8 @@ def somaPontuacao (jogadorId, connection):
 
     totalDePontos = 0
     for el in dicJogo[jogadorId]:
-        totalDePontos = totalDePontos + int(dicJogo[jogadorId][el])
+        if(dicJogo[jogadorId][el] != ' ' ):
+            totalDePontos = totalDePontos + int(dicJogo[jogadorId][el])
     
     Jogador.vinculaPontuacaoFinalAoJogador(jogadorId, totalDePontos, connection)
     
